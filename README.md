@@ -2,6 +2,10 @@
 
 A new Flutter project.
 
+Nama : Felicia Jennifer Febiola Simarmata
+NIM : 231401046
+Lab : Pemrograman Mobile 1
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
