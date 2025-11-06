@@ -14,21 +14,23 @@ class QuizCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isLandscape = screenWidth > screenHeight;
     
-    final cardWidth = _getCardWidth(screenWidth);
-    final imageHeight = _getImageHeight(screenWidth);
-    final fontSizeSmall = _getFontSizeSmall(screenWidth);
-    final fontSizeMedium = _getFontSizeMedium(screenWidth);
-    final iconSize = _getIconSize(screenWidth);
+    final cardWidth = _getCardWidth(screenWidth, isLandscape);
+    final imageHeight = _getImageHeight(screenWidth, isLandscape);
+    final fontSizeSmall = _getFontSizeSmall(screenWidth, isLandscape);
+    final fontSizeMedium = _getFontSizeMedium(screenWidth, isLandscape);
+    final iconSize = _getIconSize(screenWidth, isLandscape);
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: cardWidth,
-        margin: EdgeInsets.only(right: _getCardSpacing(screenWidth)),
+        margin: EdgeInsets.only(right: _getCardSpacing(screenWidth, isLandscape)),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(_getCardRadius(screenWidth)),
+          borderRadius: BorderRadius.circular(_getCardRadius(screenWidth, isLandscape)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -49,8 +51,8 @@ class QuizCard extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(_getCardRadius(screenWidth)),
-                  topRight: Radius.circular(_getCardRadius(screenWidth)),
+                  topLeft: Radius.circular(_getCardRadius(screenWidth, isLandscape)),
+                  topRight: Radius.circular(_getCardRadius(screenWidth, isLandscape)),
                 ),
                 gradient: LinearGradient(
                   colors: [
@@ -100,7 +102,7 @@ class QuizCard extends StatelessWidget {
             // Quiz Info
             Expanded(
               child: Padding(
-                padding: EdgeInsets.all(_getContentPadding(screenWidth)),
+                padding: EdgeInsets.all(_getContentPadding(screenWidth, isLandscape)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -162,54 +164,101 @@ class QuizCard extends StatelessWidget {
     );
   }
   
-  double _getCardWidth(double screenWidth) {
+  double _getCardWidth(double screenWidth, bool isLandscape) {
+    if (isLandscape) {
+      if (screenWidth < 600) return 160.0;
+      if (screenWidth < 900) return 180.0;
+      return 200.0;
+    }
+    
     if (screenWidth < 360) return 140.0;
     if (screenWidth < 400) return 160.0;
     if (screenWidth < 600) return 180.0;
-    return 200.0;
+    if (screenWidth < 900) return 200.0;
+    return 220.0; 
   }
 
-  double _getImageHeight(double screenWidth) {
+  double _getImageHeight(double screenWidth, bool isLandscape) {
+    if (isLandscape) {
+      if (screenWidth < 600) return 90.0;
+      if (screenWidth < 900) return 100.0;
+      return 110.0;
+    }
+    
     if (screenWidth < 360) return 80.0;
     if (screenWidth < 400) return 90.0;
     if (screenWidth < 600) return 100.0;
-    return 120.0;
+    if (screenWidth < 900) return 110.0;
+    return 120.0; 
   }
 
-  double _getCardRadius(double screenWidth) {
+  double _getCardRadius(double screenWidth, bool isLandscape) {
+    if (isLandscape) {
+      return 12.0;
+    }
+    
     if (screenWidth < 360) return 10.0;
     if (screenWidth < 400) return 12.0;
     return 16.0;
   }
 
-  double _getContentPadding(double screenWidth) {
+  double _getContentPadding(double screenWidth, bool isLandscape) {
+    if (isLandscape) {
+      if (screenWidth < 600) return 8.0;
+      return 10.0;
+    }
+    
     if (screenWidth < 360) return 8.0;
     if (screenWidth < 400) return 10.0;
     return 12.0;
   }
 
-  double _getCardSpacing(double screenWidth) {
+  double _getCardSpacing(double screenWidth, bool isLandscape) {
+    if (isLandscape) {
+      if (screenWidth < 600) return 8.0;
+      return 10.0;
+    }
+    
     if (screenWidth < 360) return 8.0;
     if (screenWidth < 400) return 10.0;
     return 12.0;
   }
 
-  double _getFontSizeSmall(double screenWidth) {
+  double _getFontSizeSmall(double screenWidth, bool isLandscape) {
+    if (isLandscape) {
+      if (screenWidth < 600) return 10.0;
+      return 11.0;
+    }
+    
     if (screenWidth < 360) return 10.0;
     if (screenWidth < 400) return 11.0;
-    return 12.0;
+    if (screenWidth < 600) return 12.0;
+    return 13.0; 
   }
 
-  double _getFontSizeMedium(double screenWidth) {
+  double _getFontSizeMedium(double screenWidth, bool isLandscape) {
+    if (isLandscape) {
+      if (screenWidth < 600) return 12.0;
+      return 13.0;
+    }
+    
     if (screenWidth < 360) return 12.0;
     if (screenWidth < 400) return 13.0;
-    return 14.0;
+    if (screenWidth < 600) return 14.0;
+    return 15.0; 
   }
 
-  double _getIconSize(double screenWidth) {
+  double _getIconSize(double screenWidth, bool isLandscape) {
+    if (isLandscape) {
+      if (screenWidth < 600) return 28.0;
+      if (screenWidth < 900) return 32.0;
+      return 34.0;
+    }
+    
     if (screenWidth < 360) return 24.0;
     if (screenWidth < 400) return 28.0;
     if (screenWidth < 600) return 32.0;
+    if (screenWidth < 900) return 34.0;
     return 36.0;
   }
 }

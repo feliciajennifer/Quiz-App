@@ -4,8 +4,7 @@ List<Map<String, dynamic>> allQuizzes = [
     'title': 'Flutter Fundamentals',
     'category': 'Technology',
     'image': 'assets/images/flutter_quiz.jpg',
-    'questionCount': 10,
-    'duration': 15,
+    'questionCount': 2,
     'description': 'Test your knowledge about Flutter framework, Dart programming language, and mobile app development concepts. Perfect for beginners and intermediate developers.',
     'difficulty': 'Beginner',
     'questions': [
@@ -36,8 +35,7 @@ List<Map<String, dynamic>> allQuizzes = [
     'title': 'Computer Science Fundamentals',
     'category': 'Technology',
     'image': 'assets/images/cs_quiz.jpg',
-    'questionCount': 10,
-    'duration': 15,
+    'questionCount': 1,
     'description': 'Test your knowledge of computer science concepts and programming principles.',
     'difficulty': 'Intermediate',
     'questions': [
@@ -58,8 +56,7 @@ List<Map<String, dynamic>> allQuizzes = [
     'title': 'Solar System Explorer',
     'category': 'Astronomy',
     'image': 'assets/images/space_quiz.jpg',
-    'questionCount': 8,
-    'duration': 12,
+    'questionCount': 1,
     'description': 'Explore the wonders of our solar system and beyond. Learn about planets, stars, and cosmic phenomena.',
     'difficulty': 'Intermediate',
     'questions': [
@@ -80,8 +77,7 @@ List<Map<String, dynamic>> allQuizzes = [
     'title': 'Biology Basics',
     'category': 'Science',
     'image': 'assets/images/biology_quiz.jpg',
-    'questionCount': 8,
-    'duration': 12,
+    'questionCount': 1,
     'description': 'Explore the fundamentals of biology, from cells to ecosystems.',
     'difficulty': 'Beginner',
     'questions': [
@@ -102,8 +98,7 @@ List<Map<String, dynamic>> allQuizzes = [
     'title': 'Chemistry Elements',
     'category': 'Science',
     'image': 'assets/images/chemistry_quiz.jpg',
-    'questionCount': 9,
-    'duration': 14,
+    'questionCount': 1,
     'description': 'Test your knowledge of chemical elements and periodic table.',
     'difficulty': 'Intermediate',
     'questions': [
@@ -121,11 +116,10 @@ List<Map<String, dynamic>> allQuizzes = [
   },
   {
     'id': '6',
-    'title': 'World Geography Challenge',
+    'title': 'World Geography',
     'category': 'Geography',
     'image': 'assets/images/geography_quiz.jpg',
-    'questionCount': 12,
-    'duration': 18,
+    'questionCount': 1,
     'description': 'Test your knowledge of world geography, countries, capitals, landmarks, and cultural facts.',
     'difficulty': 'Intermediate',
     'questions': [
@@ -143,11 +137,10 @@ List<Map<String, dynamic>> allQuizzes = [
   },
   {
     'id': '7',
-    'title': 'Basic Mathematics Quiz',
+    'title': 'Basic Mathematics',
     'category': 'Mathematics',
     'image': 'assets/images/math_quiz.jpg',
-    'questionCount': 6,
-    'duration': 10,
+    'questionCount': 1,
     'description': 'A fun quiz covering basic arithmetic, algebra, and geometry concepts. Perfect for refreshing your math skills.',
     'difficulty': 'Beginner',
     'questions': [
@@ -165,11 +158,10 @@ List<Map<String, dynamic>> allQuizzes = [
   },
   {
     'id': '8',
-    'title': 'Ancient History Adventure',
+    'title': 'Ancient History',
     'category': 'History',
     'image': 'assets/images/history_quiz.jpg',
-    'questionCount': 10,
-    'duration': 15,
+    'questionCount': 1,
     'description': 'Journey through ancient civilizations and historical events that shaped our world.',
     'difficulty': 'Intermediate',
     'questions': [

@@ -15,6 +15,9 @@ class HomePage extends StatelessWidget {
     final userModel = Provider.of<UserModel>(context);
     final quizModel = Provider.of<QuizModel>(context);
     final themeModel = Provider.of<ThemeModel>(context);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isLandscape = screenWidth > screenHeight;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -184,7 +187,7 @@ class HomePage extends StatelessWidget {
             SizedBox(height: AppDimensions.getMediumPadding(context)),
 
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.28,
+              height: _getQuizListHeight(context, isLandscape),
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: popularQuizzes.length,
@@ -195,6 +198,7 @@ class HomePage extends StatelessWidget {
                       right: index == popularQuizzes.length - 1 
                           ? 0 
                           : AppDimensions.getMediumPadding(context),
+                      left: index == 0 ? AppDimensions.getSmallPadding(context) : 0,
                     ),
                     child: QuizCard(
                       quiz: quiz,
@@ -211,5 +215,21 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  double _getQuizListHeight(BuildContext context, bool isLandscape) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
+    if (isLandscape) {
+      if (screenWidth < 600) return screenHeight * 0.45;
+      if (screenWidth < 900) return screenHeight * 0.50;
+      return screenHeight * 0.55; 
+    }
+    
+    // Portrait mode
+    if (screenHeight < 600) return screenHeight * 0.30; 
+    if (screenHeight < 800) return screenHeight * 0.32; 
+    return screenHeight * 0.35;
   }
 }
