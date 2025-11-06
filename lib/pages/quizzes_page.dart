@@ -91,46 +91,45 @@ class _QuizzesPageState extends State<QuizzesPage> {
             ),
           ),
 
+          // Categories Grid Section
           Padding(
-  padding: const EdgeInsets.all(AppDimensions.mediumPadding),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        'Quiz Categories',
-        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
+            padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Quiz Categories',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: AppDimensions.mediumPadding),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: AppDimensions.mediumPadding,
+                    mainAxisSpacing: AppDimensions.mediumPadding,
+                    childAspectRatio: 1.5,
+                  ),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final category = categories[index];
+                    return CategoryCard(
+                      category: category,
+                      onTap: () {
+                        quizModel.setCategory(category['name']);
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
-      ),
-      const SizedBox(height: AppDimensions.mediumPadding),
-      GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: AppDimensions.mediumPadding,
-          mainAxisSpacing: AppDimensions.mediumPadding,
-          childAspectRatio: 1.5,
-        ),
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          final category = categories[index];
-          return CategoryCard(
-            category: category,
-            onTap: () {
-              quizModel.setCategory(category['name']);
-              // Filter akan otomatis terapply karena ada listener
-            },
-          );
-        },
-      ),
-    ],
-  ),
-),
+          ),
 
-          // Categories Horizontal List
           SizedBox(
-            height: 80,
+            height: 60,
             child: ListView(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(
