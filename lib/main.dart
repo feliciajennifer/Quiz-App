@@ -6,9 +6,9 @@ import 'models/user_model.dart';
 import 'pages/splash_screen.dart';
 import 'pages/welcome_page.dart';
 import 'pages/main_navigation.dart';
-import 'pages/quiz_detail_page.dart'; 
-import 'pages/quiz_play_page.dart';  
-import 'pages/result_page.dart'; 
+import 'pages/quiz_detail_page.dart';
+import 'pages/quiz_play_page.dart';
+import 'pages/result_page.dart';
 
 void main() {
   runApp(
@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
       builder: (context, themeModel, child) {
         return MaterialApp(
           title: 'Thinkzone',
-          theme: themeModel.lightTheme,
-          darkTheme: themeModel.darkTheme,
+          theme: themeModel.lightTheme(context), // PASS CONTEXT
+          darkTheme: themeModel.darkTheme(context), // PASS CONTEXT
           themeMode: themeModel.themeMode,
           debugShowCheckedModeBanner: false,
           home: const SplashScreen(),

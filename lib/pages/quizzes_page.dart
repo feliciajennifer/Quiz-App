@@ -74,31 +74,53 @@ class _QuizzesPageState extends State<QuizzesPage> {
                   ),
                   const SizedBox(height: AppDimensions.mediumPadding),
                   GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: AppDimensions.mediumPadding,
-                      mainAxisSpacing: AppDimensions.mediumPadding,
-                      childAspectRatio: 1.5,
-                    ),
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      final category = categories[index];
-                      return CategoryCard(
-                        category: category,
-                        onTap: () {
-                          setState(() {
-                            _selectedCategory = category['name'];
-                          });
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
+  shrinkWrap: true,
+  physics: const NeverScrollableScrollPhysics(),
+  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: AppDimensions.getGridCrossAxisCount(context),
+    crossAxisSpacing: AppDimensions.getMediumPadding(context),
+    mainAxisSpacing: AppDimensions.getMediumPadding(context),
+    childAspectRatio: AppDimensions.getGridChildAspectRatio(context),
+  ),
+  itemCount: categories.length,
+  itemBuilder: (context, index) {
+    final category = categories[index];
+    return CategoryCard(
+      category: category,
+      onTap: () {
+        setState(() {
+          _selectedCategory = category['name'];
+        });
+      },
+    );
+  },
+),
+
+// Di bagian SliverGrid untuk quizzes, ganti dengan:
+SliverPadding(
+  padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+  sliver: SliverGrid(
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: AppDimensions.getGridCrossAxisCount(context),
+      crossAxisSpacing: AppDimensions.getMediumPadding(context),
+      mainAxisSpacing: AppDimensions.getMediumPadding(context),
+      childAspectRatio: 0.8,
+    ),
+    delegate: SliverChildBuilderDelegate(
+      (context, index) {
+        final quiz = categoryQuizzes[index];
+        return QuizCard(
+          quiz: quiz,
+          onTap: () {
+            quizModel.setCurrentQuiz(quiz);
+            Navigator.pushNamed(context, '/quiz_detail');
+          },
+        );
+      },
+      childCount: categoryQuizzes.length,
+    ),
+  ),
+),
 
           SliverToBoxAdapter(
             child: Padding(

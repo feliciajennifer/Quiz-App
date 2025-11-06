@@ -34,20 +34,21 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+        padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Welcome Section yang responsive
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(AppDimensions.largePadding),
+              padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [AppColors.primary, AppColors.secondary],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+                borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.primary.withOpacity(0.3),
@@ -81,25 +82,25 @@ class HomePage extends StatelessWidget {
                           size: 24,
                         ),
                       ),
-                      const SizedBox(width: AppDimensions.mediumPadding),
+                      SizedBox(width: AppDimensions.getMediumPadding(context)),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Hello, ${userModel.name}! 👋',
-                              style: const TextStyle(
-                                fontSize: 20,
+                              style: TextStyle(
+                                fontSize: AppDimensions.getSubtitleFontSize(context),
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                                 fontFamily: 'Nunito',
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4),
                             Text(
                               "Ready to challenge your mind?",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: AppDimensions.getBodyFontSize(context) - 2,
                                 color: Colors.white.withOpacity(0.9),
                                 fontFamily: 'Nunito',
                               ),
@@ -109,11 +110,11 @@ class HomePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: AppDimensions.mediumPadding),
+                  SizedBox(height: AppDimensions.getMediumPadding(context)),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.mediumPadding,
-                      vertical: AppDimensions.smallPadding,
+                      horizontal: 12,
+                      vertical: 6,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
@@ -127,11 +128,11 @@ class HomePage extends StatelessWidget {
                           color: Colors.white,
                           size: 16,
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6),
                         Text(
                           'Let\'s learn something new today!',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: AppDimensions.getBodyFontSize(context) - 4,
                             color: Colors.white,
                             fontFamily: 'Nunito',
                           ),
@@ -143,9 +144,9 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: AppDimensions.largePadding),
+            SizedBox(height: AppDimensions.getLargePadding(context)),
 
-            // Popular Quizzes Section
+            // Popular Quizzes Section - Responsive height
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -170,7 +171,7 @@ class HomePage extends StatelessWidget {
                   child: Text(
                     '${popularQuizzes.length} quizzes',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: AppDimensions.getBodyFontSize(context) - 4,
                       fontWeight: FontWeight.w600,
                       color: AppColors.primary,
                       fontFamily: 'Nunito',
@@ -179,11 +180,11 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: AppDimensions.mediumPadding),
+            SizedBox(height: AppDimensions.getMediumPadding(context)),
 
-            // Popular Quizzes List
+            // Popular Quizzes List - Responsive height
             SizedBox(
-              height: 245,
+              height: MediaQuery.of(context).size.height * 0.28, // Responsive height
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: popularQuizzes.length,
@@ -193,7 +194,7 @@ class HomePage extends StatelessWidget {
                     padding: EdgeInsets.only(
                       right: index == popularQuizzes.length - 1 
                           ? 0 
-                          : AppDimensions.mediumPadding,
+                          : AppDimensions.getMediumPadding(context),
                     ),
                     child: QuizCard(
                       quiz: quiz,
@@ -207,14 +208,14 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: AppDimensions.largePadding),
+            SizedBox(height: AppDimensions.getLargePadding(context)),
 
             // Explore More Section
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(AppDimensions.largePadding),
+              padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+                borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
                 border: Border.all(
                   color: Theme.of(context).dividerColor.withOpacity(0.3),
                 ),
@@ -227,38 +228,38 @@ class HomePage extends StatelessWidget {
                     size: 50,
                     color: AppColors.primary,
                   ),
-                  const SizedBox(height: AppDimensions.mediumPadding),
+                  SizedBox(height: AppDimensions.getMediumPadding(context)),
                   Text(
                     'Explore More Quizzes',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  const SizedBox(height: AppDimensions.smallPadding),
+                  SizedBox(height: AppDimensions.getSmallPadding(context)),
                   Text(
-                    'Discover hundreds of quizzes across different categories and difficulty levels',
+                    'Discover hundreds of quizzes across different categories',
                     style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: AppDimensions.mediumPadding),
+                  SizedBox(height: AppDimensions.getMediumPadding(context)),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/quizzes');
+                        // Bottom nav akan otomatis berpindah ke index 1
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+                          borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
                         ),
                         elevation: 2,
                       ),
-                      child: const Text(
+                      child: Text(
                         'Browse All Quizzes',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: AppDimensions.getBodyFontSize(context),
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           fontFamily: 'Nunito',

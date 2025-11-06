@@ -32,166 +32,171 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       backgroundColor: AppColors.primary,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimensions.largePadding),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo dan Welcome Message
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+        child: SingleChildScrollView( // TAMBAH SINGLE CHILD SCROLL VIEW
+          padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.vertical,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Logo dan Welcome Message
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.lightbulb_outline,
+                    size: 50,
+                    color: AppColors.primary,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.lightbulb_outline,
-                  size: 60,
-                  color: AppColors.primary,
+                SizedBox(height: AppDimensions.getLargePadding(context)),
+                
+                Text(
+                  'Welcome to Thinkzone!',
+                  style: AppTextStyles.playfulTitle(context).copyWith(
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              const SizedBox(height: AppDimensions.largePadding),
-              
-              Text(
-                'Welcome to Thinkzone!',
-                style: AppTextStyles.playfulTitle.copyWith(
-                  color: Colors.white,
-                  fontSize: 32,
+                
+                SizedBox(height: AppDimensions.getSmallPadding(context)),
+                
+                Text(
+                  'Expand your knowledge with fun quizzes',
+                  style: TextStyle(
+                    fontSize: AppDimensions.getBodyFontSize(context) - 2,
+                    color: Colors.white.withOpacity(0.8),
+                    fontFamily: 'Nunito',
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              
-              const SizedBox(height: AppDimensions.smallPadding),
-              
-              Text(
-                'Expand your knowledge with fun quizzes',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white.withOpacity(0.8),
-                  fontFamily: 'Nunito',
-                ),
-                textAlign: TextAlign.center,
-              ),
-              
-              const SizedBox(height: AppDimensions.largePadding),
+                
+                SizedBox(height: AppDimensions.getLargePadding(context)),
 
-              // Name Input Form
-              Card(
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(AppDimensions.largePadding),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        Text(
-                          'Let\'s get started!',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                            fontFamily: 'Nunito',
-                          ),
-                        ),
-                        
-                        const SizedBox(height: AppDimensions.mediumPadding),
-                        
-                        TextFormField(
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            labelText: 'Enter your name',
-                            hintText: 'Your awesome name...',
-                            prefixIcon: const Icon(Icons.person_outline),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+                // Name Input Form
+                Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Let\'s get started!',
+                            style: TextStyle(
+                              fontSize: AppDimensions.getSubtitleFontSize(context),
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                              fontFamily: 'Nunito',
                             ),
-                            filled: true,
-                            fillColor: Colors.grey[50],
                           ),
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Please enter your name';
-                            }
-                            if (value.trim().length < 2) {
-                              return 'Name must be at least 2 characters';
-                            }
-                            return null;
-                          },
-                        ),
-                        
-                        const SizedBox(height: AppDimensions.largePadding),
-                        
-                        SizedBox(
-                          width: double.infinity,
-                          height: 55,
-                          child: ElevatedButton(
-                            onPressed: _startQuiz,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+                          
+                          SizedBox(height: AppDimensions.getMediumPadding(context)),
+                          
+                          TextFormField(
+                            controller: _nameController,
+                            decoration: InputDecoration(
+                              labelText: 'Enter your name',
+                              hintText: 'Your awesome name...',
+                              prefixIcon: const Icon(Icons.person_outline),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
                               ),
-                              elevation: 4,
+                              filled: true,
+                              fillColor: Colors.grey[50],
                             ),
-                            child: const Text(
-                              'Start Learning',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'Nunito',
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Please enter your name';
+                              }
+                              if (value.trim().length < 2) {
+                                return 'Name must be at least 2 characters';
+                              }
+                              return null;
+                            },
+                          ),
+                          
+                          SizedBox(height: AppDimensions.getLargePadding(context)),
+                          
+                          SizedBox(
+                            width: double.infinity,
+                            height: 55,
+                            child: ElevatedButton(
+                              onPressed: _startQuiz,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
+                                ),
+                                elevation: 4,
+                              ),
+                              child: Text(
+                                'Start Learning',
+                                style: TextStyle(
+                                  fontSize: AppDimensions.getBodyFontSize(context),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontFamily: 'Nunito',
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: AppDimensions.mediumPadding),
+                SizedBox(height: AppDimensions.getMediumPadding(context)),
 
-              // Fun Facts
-              Container(
-                padding: const EdgeInsets.all(AppDimensions.mediumPadding),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.emoji_events,
-                      color: Colors.white.withOpacity(0.8),
-                      size: 20,
-                    ),
-                    const SizedBox(width: AppDimensions.smallPadding),
-                    Expanded(
-                      child: Text(
-                        'Complete quizzes to earn achievements and track your progress!',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white.withOpacity(0.8),
-                          fontFamily: 'Nunito',
+                // Fun Facts
+                Container(
+                  padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.emoji_events,
+                        color: Colors.white.withOpacity(0.8),
+                        size: 20,
+                      ),
+                      SizedBox(width: AppDimensions.getSmallPadding(context)),
+                      Expanded(
+                        child: Text(
+                          'Complete quizzes to earn achievements!',
+                          style: TextStyle(
+                            fontSize: AppDimensions.getBodyFontSize(context) - 4,
+                            color: Colors.white.withOpacity(0.8),
+                            fontFamily: 'Nunito',
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

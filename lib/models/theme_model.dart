@@ -18,6 +18,7 @@ class ThemeModel with ChangeNotifier {
 
   bool get isDarkMode => _themeMode == ThemeMode.dark;
 
+  // Static theme tanpa context (gunakan nilai default)
   ThemeData get lightTheme => ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
@@ -55,16 +56,17 @@ class ThemeModel with ChangeNotifier {
             fontFamily: 'Nunito',
           ),
         ),
-        cardTheme: CardThemeData( 
+        cardTheme: CardThemeData( // GUNAKAN CardThemeData
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+            borderRadius: BorderRadius.circular(16.0),
           ),
+          color: Colors.white,
         ),
       );
 
   ThemeData get darkTheme => ThemeData(
-        useMaterial3: true, 
+        useMaterial3: true,
         brightness: Brightness.dark,
         primaryColor: AppColors.primary,
         colorScheme: const ColorScheme.dark(
@@ -99,10 +101,10 @@ class ThemeModel with ChangeNotifier {
             fontFamily: 'Nunito',
           ),
         ),
-        cardTheme: CardThemeData(
+        cardTheme: CardThemeData( // GUNAKAN CardThemeData
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+            borderRadius: BorderRadius.circular(16.0),
           ),
           color: AppColors.darkCard,
         ),

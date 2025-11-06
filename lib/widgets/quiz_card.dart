@@ -13,15 +13,17 @@ class QuizCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardWidth = screenWidth < 360 ? 160.0 : 200.0;
+    final imageHeight = screenWidth < 360 ? 100.0 : 120.0;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 200,
+        width: cardWidth,
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+          borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -37,14 +39,14 @@ class QuizCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Quiz Image
+            // Quiz Image dengan responsive height
             Container(
-              height: 120,
+              height: imageHeight,
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(AppDimensions.cardRadius),
-                  topRight: Radius.circular(AppDimensions.cardRadius),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(AppDimensions.getCardRadius(context)),
+                  topRight: Radius.circular(AppDimensions.getCardRadius(context)),
                 ),
                 gradient: LinearGradient(
                   colors: [
@@ -72,7 +74,7 @@ class QuizCard extends StatelessWidget {
                       child: Text(
                         quiz['difficulty'],
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: screenWidth < 360 ? 8 : 10,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary,
                           fontFamily: 'Nunito',
@@ -83,7 +85,7 @@ class QuizCard extends StatelessWidget {
                   Center(
                     child: Icon(
                       Icons.quiz,
-                      size: 40,
+                      size: screenWidth < 360 ? 30 : 40,
                       color: Colors.white.withOpacity(0.9),
                     ),
                   ),
@@ -94,7 +96,7 @@ class QuizCard extends StatelessWidget {
             // Quiz Info
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+                padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,7 +107,7 @@ class QuizCard extends StatelessWidget {
                         Text(
                           quiz['title'],
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: AppDimensions.getBodyFontSize(context) - 2,
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).textTheme.bodyLarge?.color,
                             fontFamily: 'Nunito',
@@ -113,12 +115,12 @@ class QuizCard extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 4),
                         Text(
                           quiz['category'],
                           style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.6), 
+                            fontSize: AppDimensions.getBodyFontSize(context) - 4,
+                            color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.6),
                             fontFamily: 'Nunito',
                           ),
                         ),
@@ -126,39 +128,39 @@ class QuizCard extends StatelessWidget {
                     ),
                     
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
                             Icon(
                               Icons.question_answer,
-                              size: 14,
+                              size: screenWidth < 360 ? 12 : 14,
                               color: AppColors.primary,
                             ),
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4),
                             Text(
                               '${quiz['questionCount']}',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: AppDimensions.getBodyFontSize(context) - 4,
                                 fontWeight: FontWeight.w600,
-                                color: Theme.of(context).textTheme.bodyLarge?.color, 
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
                                 fontFamily: 'Nunito',
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(width: 12),
                         Row(
                           children: [
                             Icon(
                               Icons.timer,
-                              size: 14,
+                              size: screenWidth < 360 ? 12 : 14,
                               color: AppColors.primary,
                             ),
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4),
                             Text(
                               '${quiz['duration']}m',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: AppDimensions.getBodyFontSize(context) - 4,
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).textTheme.bodyLarge?.color,
                                 fontFamily: 'Nunito',
