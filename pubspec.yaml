@@ -1,5 +1,5 @@
-name: kuis_pintar
-description: Aplikasi kuis pilihan ganda dengan Flutter
+name: thinkzone
+description: Thinkzone Quiz App
 
 publish_to: 'none'
 
@@ -19,13 +19,16 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 flutter:
-#   uses-material-design: true
-#   assets:
-#     - assets/
+  # uses-material-design: true
+  
+  # assets:
+  #   - assets/images/
   
   fonts:
-    - family: Inter
+    - family: Nunito
       fonts:
-        - asset: fonts/Inter_18pt-Regular.ttf
-        - asset: fonts/Inter_24pt-Bold.ttf
+        - asset: fonts/Nunito-Regular.ttf
+        - asset: fonts/Nunito-Bold.ttf
           weight: 700
+        - asset: fonts/Nunito-ExtraBold.ttf
+          weight: 800

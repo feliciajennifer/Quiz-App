@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../utils/constants.dart';
 
 class ThemeModel with ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.light;
 
   ThemeMode get themeMode => _themeMode;
 
@@ -10,53 +11,94 @@ class ThemeModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleTheme(bool isDark) {
-    _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+  void toggleTheme() {
+    _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     notifyListeners();
   }
 
   ThemeData get lightTheme => ThemeData(
         brightness: Brightness.light,
-        primarySwatch: Colors.blue,
-        fontFamily: 'Inter',
+        primaryColor: AppColors.primary,
+        colorScheme: const ColorScheme.light(
+          primary: AppColors.primary,
+          secondary: AppColors.secondary,
+        ),
+        fontFamily: 'Nunito',
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
+          foregroundColor: AppColors.textPrimary,
           elevation: 0,
+          centerTitle: true,
         ),
         textTheme: const TextTheme(
-          headlineLarge: TextStyle(
-            fontSize: 28,
+          displayLarge: TextStyle(
+            fontSize: 32,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: AppColors.textPrimary,
+            fontFamily: 'Nunito',
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: AppColors.textPrimary,
+            fontFamily: 'Nunito',
           ),
           bodyLarge: TextStyle(
             fontSize: 16,
-            color: Colors.black87,
+            fontWeight: FontWeight.w500,
+            color: AppColors.textSecondary,
+            fontFamily: 'Nunito',
+          ),
+        ),
+        cardTheme: CardTheme(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
           ),
         ),
       );
 
   ThemeData get darkTheme => ThemeData(
         brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
-        fontFamily: 'Inter',
-        scaffoldBackgroundColor: Colors.grey[900],
+        primaryColor: AppColors.primary,
+        colorScheme: const ColorScheme.dark(
+          primary: AppColors.primary,
+          secondary: AppColors.secondary,
+        ),
+        fontFamily: 'Nunito',
+        scaffoldBackgroundColor: AppColors.darkBackground,
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.grey[900],
+          backgroundColor: AppColors.darkBackground,
           elevation: 0,
+          centerTitle: true,
         ),
         textTheme: const TextTheme(
-          headlineLarge: TextStyle(
-            fontSize: 28,
+          displayLarge: TextStyle(
+            fontSize: 32,
             fontWeight: FontWeight.bold,
             color: Colors.white,
+            fontFamily: 'Nunito',
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+            fontFamily: 'Nunito',
           ),
           bodyLarge: TextStyle(
             fontSize: 16,
+            fontWeight: FontWeight.w500,
             color: Colors.white70,
+            fontFamily: 'Nunito',
           ),
+        ),
+        cardTheme: CardTheme(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+          ),
+          color: AppColors.darkCard,
         ),
       );
 }

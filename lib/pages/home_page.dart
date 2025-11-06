@@ -1,183 +1,145 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/user_model.dart';
 import '../models/quiz_model.dart';
 import '../utils/constants.dart';
 import '../utils/quiz_data.dart';
-import '../widgets/custom_app_bar.dart';
+import '../widgets/bottom_nav_bar.dart';
+import '../widgets/quiz_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userModel = Provider.of<UserModel>(context);
     final quizModel = Provider.of<QuizModel>(context);
-    final TextEditingController nameController = TextEditingController();
 
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Kuis Pintar',
-        showBackButton: false,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text(
+          'Thinkzone',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.brightness_6),
+            onPressed: () {
+              final themeModel = Provider.of<ThemeModel>(context, listen: false);
+              themeModel.toggleTheme();
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppConstants.mediumPadding),
+        padding: const EdgeInsets.all(AppDimensions.mediumPadding),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header Image
+            // Welcome Section
             Container(
-              height: MediaQuery.of(context).size.height * 0.3,
-              margin: const EdgeInsets.only(bottom: AppConstants.largePadding),
-              child: Image.asset(
-                'assets/quiz_icon.png', // Pastikan Anda menambahkan gambar ini di folder assets
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    Icons.quiz,
-                    size: 120,
-                    color: Theme.of(context).primaryColor,
+              width: double.infinity,
+              padding: const EdgeInsets.all(AppDimensions.largePadding),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [AppColors.primary, AppColors.secondary],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Hello, ${userModel.name.isNotEmpty ? userModel.name : 'Explorer'}!',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontFamily: 'Nunito',
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.smallPadding),
+                  const Text(
+                    "Let's test your knowledge and have fun learning!",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontFamily: 'Nunito',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: AppDimensions.largePadding),
+
+            // Popular Quizzes Section
+            Text(
+              'Popular Quizzes',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: AppDimensions.mediumPadding),
+
+            // Popular Quizzes List
+            SizedBox(
+              height: 220,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: popularQuizzes.length,
+                itemBuilder: (context, index) {
+                  final quiz = popularQuizzes[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(right: AppDimensions.mediumPadding),
+                    child: QuizCard(
+                      quiz: quiz,
+                      onTap: () {
+                        quizModel.setCurrentQuiz(quiz);
+                        Navigator.pushNamed(context, '/quiz_detail');
+                      },
+                    ),
                   );
                 },
               ),
             ),
-            
-            // Title
+
+            const SizedBox(height: AppDimensions.largePadding),
+
+            // Quick Categories Section
             Text(
-              'Selamat Datang!',
-              style: Theme.of(context).textTheme.headlineLarge,
-              textAlign: TextAlign.center,
+              'Quick Categories',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
-            
-            const SizedBox(height: AppConstants.smallPadding),
-            
-            Text(
-              'Uji pengetahuan Anda dengan kuis menarik ini',
-              style: Theme.of(context).textTheme.bodyLarge,
-              textAlign: TextAlign.center,
-            ),
-            
-            const SizedBox(height: AppConstants.largePadding),
-            
-            // Name Input
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            const SizedBox(height: AppDimensions.mediumPadding),
+
+            // Categories Grid
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: AppDimensions.mediumPadding,
+                mainAxisSpacing: AppDimensions.mediumPadding,
+                childAspectRatio: 1.5,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(AppConstants.mediumPadding),
-                child: Column(
-                  children: [
-                    Text(
-                      'Masukkan Nama Anda',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    const SizedBox(height: AppConstants.mediumPadding),
-                    TextField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        hintText: 'Nama Anda...',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-                        ),
-                        prefixIcon: const Icon(Icons.person),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            
-            const SizedBox(height: AppConstants.largePadding),
-            
-            // Quiz Info
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(AppConstants.mediumPadding),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Icon(
-                        Icons.help_outline,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      title: Text(
-                        '${quizQuestions.length} Pertanyaan',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.timer,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      title: Text(
-                        'Waktu Tidak Terbatas',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.emoji_events,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      title: Text(
-                        'Lihat Skor Akhir',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            
-            const SizedBox(height: AppConstants.largePadding),
-            
-            // Start Button
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (nameController.text.trim().isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Silakan masukkan nama Anda terlebih dahulu!'),
-                      ),
-                    );
-                    return;
-                  }
-                  
-                  quizModel.userName = nameController.text.trim();
-                  quizModel.setQuestions(quizQuestions);
-                  
-                  Navigator.pushNamed(context, '/quiz');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-                  ),
-                  elevation: 4,
-                ),
-                child: const Text(
-                  'Mulai Kuis',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Inter',
-                  ),
-                ),
-              ),
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                final category = categories[index];
+                return CategoryCard(
+                  category: category,
+                  onTap: () {
+                    quizModel.setCategory(category['name']);
+                    Navigator.pushNamed(context, '/quizzes');
+                  },
+                );
+              },
             ),
           ],
         ),
       ),
+      bottomNavigationBar: const BottomNavBar(currentIndex: 0),
     );
   }
 }

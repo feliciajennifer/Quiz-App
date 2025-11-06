@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/theme_model.dart';
-import 'models/quiz_model.dart'; 
-import 'pages/home_page.dart';
-import 'pages/quiz_page.dart'; 
-import 'pages/result_page.dart';
+import 'models/quiz_model.dart';
+import 'models/user_model.dart';
+import 'pages/splash_screen.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeModel(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeModel()),
+        ChangeNotifierProvider(create: (context) => QuizModel()),
+        ChangeNotifierProvider(create: (context) => UserModel()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -20,28 +23,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => ThemeModel()),
-        ChangeNotifierProvider(create: (context) => QuizModel()),
-      ],
-      child: Consumer<ThemeModel>(
-        builder: (context, themeModel, child) {
-          return MaterialApp(
-            title: 'Kuis Pintar',
-            theme: themeModel.lightTheme,
-            darkTheme: themeModel.darkTheme,
-            themeMode: themeModel.themeMode,
-            debugShowCheckedModeBanner: false,
-            initialRoute: '/',
-            routes: {
-              '/': (context) => const HomePage(),
-              '/quiz': (context) => const QuizPage(),
-              '/result': (context) => const ResultPage(),
-            },
-          );
-        },
-      ),
+    return Consumer<ThemeModel>(
+      builder: (context, themeModel, child) {
+        return MaterialApp(
+          title: 'Thinkzone',
+          theme: themeModel.lightTheme,
+          darkTheme: themeModel.darkTheme,
+          themeMode: themeModel.themeMode,
+          debugShowCheckedModeBanner: false,
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 }
