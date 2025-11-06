@@ -5,10 +5,8 @@ import '../models/quiz_model.dart';
 import '../models/theme_model.dart';
 import '../utils/constants.dart';
 import '../utils/quiz_data.dart';
-import '../utils/categories_data.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/quiz_card.dart';
-import '../widgets/category_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,19 +15,21 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userModel = Provider.of<UserModel>(context);
     final quizModel = Provider.of<QuizModel>(context);
+    final themeModel = Provider.of<ThemeModel>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(
-          'Thinkzone',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
+        // HILANGKAN TULISAN THINKZONE
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.brightness_6),
+            icon: Icon(
+              themeModel.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
             onPressed: () {
-              final themeModel = Provider.of<ThemeModel>(context, listen: false);
               themeModel.toggleTheme();
             },
           ),
@@ -40,7 +40,6 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome Section dengan nama user
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(AppDimensions.largePadding),
@@ -51,38 +50,96 @@ class HomePage extends StatelessWidget {
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withOpacity(0.3),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Hello, ${userModel.name}! 👋',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontFamily: 'Nunito',
-                    ),
-                  ),
-                  const SizedBox(height: AppDimensions.smallPadding),
-                  const Text(
-                    "Let's test your knowledge and have fun learning!",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontFamily: 'Nunito',
-                    ),
-                  ),
-                  const SizedBox(height: AppDimensions.mediumPadding),
-                  // User Stats
                   Row(
                     children: [
-                      _buildStatItem('Quizzes', '0', Icons.quiz),
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 5,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.lightbulb_outline,
+                          color: AppColors.primary,
+                          size: 24,
+                        ),
+                      ),
                       const SizedBox(width: AppDimensions.mediumPadding),
-                      _buildStatItem('Score', '0', Icons.emoji_events),
-                      const SizedBox(width: AppDimensions.mediumPadding),
-                      _buildStatItem('Level', '1', Icons.star),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hello, ${userModel.name}! 👋',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'Nunito',
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "Ready to challenge your mind?",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white.withOpacity(0.9),
+                                fontFamily: 'Nunito',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
+                  ),
+                  const SizedBox(height: AppDimensions.mediumPadding),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.mediumPadding,
+                      vertical: AppDimensions.smallPadding,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.rocket_launch,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          'Let\'s learn something new today!',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -96,13 +153,31 @@ class HomePage extends StatelessWidget {
               children: [
                 Text(
                   'Popular Quizzes',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/quizzes');
-                  },
-                  child: const Text('See All'),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: AppColors.primary.withOpacity(0.3),
+                    ),
+                  ),
+                  child: Text(
+                    '${popularQuizzes.length} quizzes',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                      fontFamily: 'Nunito',
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -110,14 +185,18 @@ class HomePage extends StatelessWidget {
 
             // Popular Quizzes List
             SizedBox(
-              height: 220,
+              height: 245,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: popularQuizzes.length,
                 itemBuilder: (context, index) {
                   final quiz = popularQuizzes[index];
                   return Padding(
-                    padding: const EdgeInsets.only(right: AppDimensions.mediumPadding),
+                    padding: EdgeInsets.only(
+                      right: index == popularQuizzes.length - 1 
+                          ? 0 
+                          : AppDimensions.mediumPadding,
+                    ),
                     child: QuizCard(
                       quiz: quiz,
                       onTap: () {
@@ -132,97 +211,60 @@ class HomePage extends StatelessWidget {
 
             const SizedBox(height: AppDimensions.largePadding),
 
-            // Quick Categories Section
-            Text(
-              'Quick Categories',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: AppDimensions.mediumPadding),
-
-            // Categories Grid
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: AppDimensions.mediumPadding,
-                mainAxisSpacing: AppDimensions.mediumPadding,
-                childAspectRatio: 1.5,
-              ),
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
-                return CategoryCard(
-                  category: category,
-                  onTap: () {
-                    quizModel.setCategory(category['name']);
-                    Navigator.pushNamed(context, '/quizzes');
-                  },
-                );
-              },
-            ),
-
-            const SizedBox(height: AppDimensions.largePadding),
-
-            // Daily Challenge Section
+            // Explore More Section
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+              padding: const EdgeInsets.all(AppDimensions.largePadding),
               decoration: BoxDecoration(
-                color: AppColors.accent.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
                 border: Border.all(
-                  color: AppColors.accent.withOpacity(0.3),
+                  color: Theme.of(context).dividerColor.withOpacity(0.3),
                 ),
+                color: Theme.of(context).cardColor,
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  const Icon(
-                    Icons.bolt,
-                    color: AppColors.accent,
-                    size: 40,
+                  Icon(
+                    Icons.explore,
+                    size: 50,
+                    color: AppColors.primary,
                   ),
-                  const SizedBox(width: AppDimensions.mediumPadding),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Daily Challenge',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,
-                            fontFamily: 'Nunito',
-                          ),
+                  const SizedBox(height: AppDimensions.mediumPadding),
+                  Text(
+                    'Explore More Quizzes',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Complete today\'s special quiz for bonus points!',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
-                            fontFamily: 'Nunito',
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigate to daily challenge
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.accent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+                  const SizedBox(height: AppDimensions.smallPadding),
+                  Text(
+                    'Discover hundreds of quizzes across different categories and difficulty levels',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppDimensions.mediumPadding),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/quizzes');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+                        ),
+                        elevation: 2,
                       ),
-                    ),
-                    child: const Text(
-                      'Start',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                      child: const Text(
+                        'Browse All Quizzes',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: 'Nunito',
+                        ),
                       ),
                     ),
                   ),
@@ -233,41 +275,6 @@ class HomePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: const BottomNavBar(currentIndex: 0),
-    );
-  }
-
-  Widget _buildStatItem(String label, String value, IconData icon) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(AppDimensions.smallPadding),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: Colors.white, size: 20),
-            const SizedBox(height: 4),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: 'Nunito',
-              ),
-            ),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.white.withOpacity(0.8),
-                fontFamily: 'Nunito',
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
