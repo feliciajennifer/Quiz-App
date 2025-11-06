@@ -15,46 +15,24 @@ class QuizzesPage extends StatefulWidget {
 }
 
 class _QuizzesPageState extends State<QuizzesPage> {
-  final TextEditingController _searchController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
+  String _selectedCategory = 'All';
+  final Map<String, List<Map<String, dynamic>>> _quizzesByCategory = getQuizzesByCategory();
 
-  @override
-  void initState() {
-    super.initState();
-    _searchController.addListener(_onSearchChanged);
-  }
-
-  void _onSearchChanged() {
-    final quizModel = Provider.of<QuizModel>(context, listen: false);
-    quizModel.setSearchQuery(_searchController.text);
-  }
-
-  List<Map<String, dynamic>> _getFilteredQuizzes(String selectedCategory, String searchQuery) {
-    List<Map<String, dynamic>> filtered = allQuizzes;
-
-    // Filter by category
-    if (selectedCategory != 'All') {
-      filtered = filtered.where((quiz) => quiz['category'] == selectedCategory).toList();
+  List<Map<String, dynamic>> getQuizzesForSelectedCategory() {
+    if (_selectedCategory == 'All') {
+      return allQuizzes;
     }
-
-    if (searchQuery.isNotEmpty) {
-      filtered = filtered.where((quiz) =>
-          quiz['title'].toLowerCase().contains(searchQuery.toLowerCase()) ||
-          quiz['category'].toLowerCase().contains(searchQuery.toLowerCase())).toList();
-    }
-
-    return filtered;
+    return _quizzesByCategory[_selectedCategory] ?? [];
   }
 
   @override
   Widget build(BuildContext context) {
     final quizModel = Provider.of<QuizModel>(context);
-    final filteredQuizzes = _getFilteredQuizzes(quizModel.selectedCategory, quizModel.searchQuery);
+    final categoryQuizzes = getQuizzesForSelectedCategory();
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: CustomScrollView(
-        controller: _scrollController,
         slivers: [
           SliverAppBar(
             title: Text(
@@ -75,38 +53,6 @@ class _QuizzesPageState extends State<QuizzesPage> {
                     colors: [AppColors.primary, AppColors.secondary],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // Search Bar
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(AppDimensions.mediumPadding),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Search by title or category...',
-                    prefixIcon: const Icon(Icons.search),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.mediumPadding,
-                      vertical: AppDimensions.smallPadding,
-                    ),
                   ),
                 ),
               ),
@@ -142,13 +88,9 @@ class _QuizzesPageState extends State<QuizzesPage> {
                       return CategoryCard(
                         category: category,
                         onTap: () {
-                          quizModel.setCategory(category['name']);
-                          // Scroll ke bagian quizzes
-                          _scrollController.animateTo(
-                            400,
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeInOut,
-                          );
+                          setState(() {
+                            _selectedCategory = category['name'];
+                          });
                         },
                       );
                     },
@@ -158,80 +100,6 @@ class _QuizzesPageState extends State<QuizzesPage> {
             ),
           ),
 
-          // Categories Horizontal Filter Chips
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 70,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: AppDimensions.smallPadding),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.mediumPadding,
-                    ),
-                    child: Text(
-                      'Filter by Category:',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppDimensions.mediumPadding,
-                      ),
-                      children: [
-                        // All Categories
-                        Padding(
-                          padding: const EdgeInsets.only(right: AppDimensions.smallPadding),
-                          child: FilterChip(
-                            label: const Text('All'),
-                            selected: quizModel.selectedCategory == 'All',
-                            onSelected: (selected) {
-                              quizModel.setCategory('All');
-                            },
-                            backgroundColor: Theme.of(context).cardColor,
-                            selectedColor: AppColors.primary,
-                            labelStyle: TextStyle(
-                              color: quizModel.selectedCategory == 'All' 
-                                  ? Colors.white 
-                                  : Theme.of(context).textTheme.bodyLarge?.color,
-                            ),
-                          ),
-                        ),
-                        // Other Categories
-                        ...categories.map((category) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: AppDimensions.smallPadding),
-                            child: FilterChip(
-                              label: Text(category['name']),
-                              selected: quizModel.selectedCategory == category['name'],
-                              onSelected: (selected) {
-                                quizModel.setCategory(category['name']);
-                              },
-                              backgroundColor: Theme.of(context).cardColor,
-                              selectedColor: Color(category['color']),
-                              labelStyle: TextStyle(
-                                color: quizModel.selectedCategory == category['name'] 
-                                    ? Colors.white 
-                                    : Theme.of(context).textTheme.bodyLarge?.color,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // Quizzes Grid Header
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(
@@ -244,9 +112,9 @@ class _QuizzesPageState extends State<QuizzesPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    quizModel.selectedCategory == 'All' 
+                    _selectedCategory == 'All' 
                         ? 'All Quizzes' 
-                        : '${quizModel.selectedCategory} Quizzes',
+                        : '${_selectedCategory} Quizzes',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -264,7 +132,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
                       ),
                     ),
                     child: Text(
-                      '${filteredQuizzes.length} quizzes',
+                      '${categoryQuizzes.length} quiz${categoryQuizzes.length != 1 ? 'zes' : ''}',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -279,72 +147,67 @@ class _QuizzesPageState extends State<QuizzesPage> {
           ),
 
           // Quizzes Grid
-          filteredQuizzes.isEmpty
-              ? SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppDimensions.largePadding),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.search_off,
-                          size: 80,
-                          color: Colors.grey.withOpacity(0.5),
-                        ),
-                        const SizedBox(height: AppDimensions.mediumPadding),
-                        Text(
-                          'No quizzes found',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                            fontFamily: 'Nunito',
-                          ),
-                        ),
-                        const SizedBox(height: AppDimensions.smallPadding),
-                        Text(
-                          'Try changing your search or filter',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.withOpacity(0.7),
-                            fontFamily: 'Nunito',
-                          ),
-                        ),
-                      ],
+          if (categoryQuizzes.isEmpty)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(AppDimensions.largePadding),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.quiz_outlined,
+                      size: 80,
+                      color: Colors.grey.withOpacity(0.5),
                     ),
-                  ),
-                )
-              : SliverPadding(
-                  padding: const EdgeInsets.all(AppDimensions.mediumPadding),
-                  sliver: SliverGrid(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: AppDimensions.mediumPadding,
-                      mainAxisSpacing: AppDimensions.mediumPadding,
-                      childAspectRatio: 0.8,
+                    const SizedBox(height: AppDimensions.mediumPadding),
+                    Text(
+                      'No quizzes available',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey,
+                        fontFamily: 'Nunito',
+                      ),
                     ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final quiz = filteredQuizzes[index];
-                        return QuizCard(
-                          quiz: quiz,
-                          onTap: () {
-                            quizModel.setCurrentQuiz(quiz);
-                            Navigator.pushNamed(context, '/quiz_detail');
-                          },
-                        );
-                      },
-                      childCount: filteredQuizzes.length,
+                    const SizedBox(height: AppDimensions.smallPadding),
+                    Text(
+                      'Check back later for new quizzes!',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.withOpacity(0.7),
+                        fontFamily: 'Nunito',
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
+                  ],
                 ),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+              sliver: SliverGrid(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: AppDimensions.mediumPadding,
+                  mainAxisSpacing: AppDimensions.mediumPadding,
+                  childAspectRatio: 0.8,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final quiz = categoryQuizzes[index];
+                    return QuizCard(
+                      quiz: quiz,
+                      onTap: () {
+                        quizModel.setCurrentQuiz(quiz);
+                        Navigator.pushNamed(context, '/quiz_detail');
+                      },
+                    );
+                  },
+                  childCount: categoryQuizzes.length,
+                ),
+              ),
+            ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _scrollController.dispose();
-    super.dispose();
   }
 }

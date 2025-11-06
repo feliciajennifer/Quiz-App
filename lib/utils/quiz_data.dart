@@ -33,6 +33,28 @@ List<Map<String, dynamic>> allQuizzes = [
   },
   {
     'id': '2',
+    'title': 'Computer Science Fundamentals',
+    'category': 'Technology',
+    'image': 'assets/images/cs_quiz.jpg',
+    'questionCount': 10,
+    'duration': 15,
+    'description': 'Test your knowledge of computer science concepts and programming principles.',
+    'difficulty': 'Intermediate',
+    'questions': [
+      {
+        'question': 'What does CPU stand for?',
+        'answers': [
+          'Central Processing Unit',
+          'Computer Processing Unit',
+          'Central Program Unit',
+          'Computer Program Unit'
+        ],
+        'correctAnswer': 0,
+      },
+    ],
+  },
+  {
+    'id': '3',
     'title': 'Solar System Explorer',
     'category': 'Astronomy',
     'image': 'assets/images/space_quiz.jpg',
@@ -54,73 +76,7 @@ List<Map<String, dynamic>> allQuizzes = [
     ],
   },
   {
-    'id': '3',
-    'title': 'World Geography Challenge',
-    'category': 'Geography',
-    'image': 'assets/images/geography_quiz.jpg',
-    'questionCount': 12,
-    'duration': 18,
-    'description': 'Test your knowledge of world geography, countries, capitals, landmarks, and cultural facts.',
-    'difficulty': 'Intermediate',
-    'questions': [
-      {
-        'question': 'What is the capital of Australia?',
-        'answers': [
-          'Canberra',
-          'Sydney',
-          'Melbourne',
-          'Perth'
-        ],
-        'correctAnswer': 0,
-      },
-    ],
-  },
-  {
     'id': '4',
-    'title': 'Basic Mathematics Quiz',
-    'category': 'Mathematics',
-    'image': 'assets/images/math_quiz.jpg',
-    'questionCount': 6,
-    'duration': 10,
-    'description': 'A fun quiz covering basic arithmetic, algebra, and geometry concepts. Perfect for refreshing your math skills.',
-    'difficulty': 'Beginner',
-    'questions': [
-      {
-        'question': 'What is 15 + 27?',
-        'answers': [
-          '42',
-          '32',
-          '52',
-          '37'
-        ],
-        'correctAnswer': 0,
-      },
-    ],
-  },
-  {
-    'id': '5',
-    'title': 'Ancient History Adventure',
-    'category': 'History',
-    'image': 'assets/images/history_quiz.jpg',
-    'questionCount': 10,
-    'duration': 15,
-    'description': 'Journey through ancient civilizations and historical events that shaped our world.',
-    'difficulty': 'Intermediate',
-    'questions': [
-      {
-        'question': 'Which civilization built the pyramids?',
-        'answers': [
-          'Ancient Egyptians',
-          'Ancient Greeks',
-          'Romans',
-          'Mayans'
-        ],
-        'correctAnswer': 0,
-      },
-    ],
-  },
-  {
-    'id': '6',
     'title': 'Biology Basics',
     'category': 'Science',
     'image': 'assets/images/biology_quiz.jpg',
@@ -142,22 +98,88 @@ List<Map<String, dynamic>> allQuizzes = [
     ],
   },
   {
-    'id': '7',
-    'title': 'Computer Science Fundamentals',
-    'category': 'Technology',
-    'image': 'assets/images/cs_quiz.jpg',
-    'questionCount': 10,
-    'duration': 15,
-    'description': 'Test your knowledge of computer science concepts and programming principles.',
+    'id': '5',
+    'title': 'Chemistry Elements',
+    'category': 'Science',
+    'image': 'assets/images/chemistry_quiz.jpg',
+    'questionCount': 9,
+    'duration': 14,
+    'description': 'Test your knowledge of chemical elements and periodic table.',
     'difficulty': 'Intermediate',
     'questions': [
       {
-        'question': 'What does CPU stand for?',
+        'question': 'What is the chemical symbol for Gold?',
         'answers': [
-          'Central Processing Unit',
-          'Computer Processing Unit',
-          'Central Program Unit',
-          'Computer Program Unit'
+          'Au',
+          'Ag',
+          'Go',
+          'Gd'
+        ],
+        'correctAnswer': 0,
+      },
+    ],
+  },
+  {
+    'id': '6',
+    'title': 'World Geography Challenge',
+    'category': 'Geography',
+    'image': 'assets/images/geography_quiz.jpg',
+    'questionCount': 12,
+    'duration': 18,
+    'description': 'Test your knowledge of world geography, countries, capitals, landmarks, and cultural facts.',
+    'difficulty': 'Intermediate',
+    'questions': [
+      {
+        'question': 'What is the capital of Australia?',
+        'answers': [
+          'Canberra',
+          'Sydney',
+          'Melbourne',
+          'Perth'
+        ],
+        'correctAnswer': 0,
+      },
+    ],
+  },
+  {
+    'id': '7',
+    'title': 'Basic Mathematics Quiz',
+    'category': 'Mathematics',
+    'image': 'assets/images/math_quiz.jpg',
+    'questionCount': 6,
+    'duration': 10,
+    'description': 'A fun quiz covering basic arithmetic, algebra, and geometry concepts. Perfect for refreshing your math skills.',
+    'difficulty': 'Beginner',
+    'questions': [
+      {
+        'question': 'What is 15 + 27?',
+        'answers': [
+          '42',
+          '32',
+          '52',
+          '37'
+        ],
+        'correctAnswer': 0,
+      },
+    ],
+  },
+  {
+    'id': '8',
+    'title': 'Ancient History Adventure',
+    'category': 'History',
+    'image': 'assets/images/history_quiz.jpg',
+    'questionCount': 10,
+    'duration': 15,
+    'description': 'Journey through ancient civilizations and historical events that shaped our world.',
+    'difficulty': 'Intermediate',
+    'questions': [
+      {
+        'question': 'Which civilization built the pyramids?',
+        'answers': [
+          'Ancient Egyptians',
+          'Ancient Greeks',
+          'Romans',
+          'Mayans'
         ],
         'correctAnswer': 0,
       },
@@ -165,10 +187,25 @@ List<Map<String, dynamic>> allQuizzes = [
   },
 ];
 
+// Group quizzes by category
+Map<String, List<Map<String, dynamic>>> getQuizzesByCategory() {
+  Map<String, List<Map<String, dynamic>>> quizzesByCategory = {};
+  
+  for (var quiz in allQuizzes) {
+    String category = quiz['category'];
+    if (!quizzesByCategory.containsKey(category)) {
+      quizzesByCategory[category] = [];
+    }
+    quizzesByCategory[category]!.add(quiz);
+  }
+  
+  return quizzesByCategory;
+}
+
 List<Map<String, dynamic>> popularQuizzes = [
   allQuizzes[0], // Flutter Fundamentals
-  allQuizzes[1], // Solar System Explorer
-  allQuizzes[2], // World Geography Challenge
-  allQuizzes[3], // Basic Mathematics Quiz
-  allQuizzes[4], // Ancient History Adventure
+  allQuizzes[2], // Solar System Explorer
+  allQuizzes[5], // World Geography Challenge
+  allQuizzes[6], // Basic Mathematics Quiz
+  allQuizzes[7], // Ancient History Adventure
 ];

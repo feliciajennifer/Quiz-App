@@ -64,7 +64,7 @@ class CategoryCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Explore quizzes',
+                    '${category['quizCount']} quiz${category['quizCount'] > 1 ? 'zes' : ''}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.8),

@@ -5,7 +5,6 @@ import '../models/quiz_model.dart';
 import '../models/theme_model.dart';
 import '../utils/constants.dart';
 import '../utils/quiz_data.dart';
-import '../widgets/bottom_nav_bar.dart';
 import '../widgets/quiz_card.dart';
 
 class HomePage extends StatelessWidget {
@@ -20,7 +19,6 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        // HILANGKAN TULISAN THINKZONE
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         actions: [
@@ -274,7 +272,6 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(currentIndex: 0),
     );
   }
 }
