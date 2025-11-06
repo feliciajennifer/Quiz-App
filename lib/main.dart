@@ -4,6 +4,7 @@ import 'models/theme_model.dart';
 import 'models/quiz_model.dart';
 import 'models/user_model.dart';
 import 'pages/splash_screen.dart';
+import 'pages/welcome_page.dart'; // TAMBAH IMPORT INI
 import 'pages/home_page.dart';
 import 'pages/quizzes_page.dart';
 import 'pages/quiz_detail_page.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: const SplashScreen(),
           routes: {
+            '/welcome': (context) => const WelcomePage(), // TAMBAH ROUTE INI
             '/home': (context) => const HomePage(),
             '/quizzes': (context) => const QuizzesPage(),
             '/quiz_detail': (context) => const QuizDetailPage(),

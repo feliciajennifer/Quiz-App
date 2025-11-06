@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
 import '../models/quiz_model.dart';
+import '../models/theme_model.dart';
 import '../utils/constants.dart';
 import '../utils/quiz_data.dart';
+import '../utils/categories_data.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/quiz_card.dart';
+import '../widgets/category_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -37,7 +40,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome Section
+            // Welcome Section dengan nama user
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(AppDimensions.largePadding),
@@ -53,7 +56,7 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hello, ${userModel.name.isNotEmpty ? userModel.name : 'Explorer'}!',
+                    'Hello, ${userModel.name}! 👋',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -70,6 +73,17 @@ class HomePage extends StatelessWidget {
                       fontFamily: 'Nunito',
                     ),
                   ),
+                  const SizedBox(height: AppDimensions.mediumPadding),
+                  // User Stats
+                  Row(
+                    children: [
+                      _buildStatItem('Quizzes', '0', Icons.quiz),
+                      const SizedBox(width: AppDimensions.mediumPadding),
+                      _buildStatItem('Score', '0', Icons.emoji_events),
+                      const SizedBox(width: AppDimensions.mediumPadding),
+                      _buildStatItem('Level', '1', Icons.star),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -77,9 +91,20 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: AppDimensions.largePadding),
 
             // Popular Quizzes Section
-            Text(
-              'Popular Quizzes',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Popular Quizzes',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/quizzes');
+                  },
+                  child: const Text('See All'),
+                ),
+              ],
             ),
             const SizedBox(height: AppDimensions.mediumPadding),
 
@@ -136,10 +161,113 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
+
+            const SizedBox(height: AppDimensions.largePadding),
+
+            // Daily Challenge Section
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+              decoration: BoxDecoration(
+                color: AppColors.accent.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+                border: Border.all(
+                  color: AppColors.accent.withOpacity(0.3),
+                ),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.bolt,
+                    color: AppColors.accent,
+                    size: 40,
+                  ),
+                  const SizedBox(width: AppDimensions.mediumPadding),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Daily Challenge',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Complete today\'s special quiz for bonus points!',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Navigate to daily challenge
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.accent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+                      ),
+                    ),
+                    child: const Text(
+                      'Start',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
       bottomNavigationBar: const BottomNavBar(currentIndex: 0),
+    );
+  }
+
+  Widget _buildStatItem(String label, String value, IconData icon) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(AppDimensions.smallPadding),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: Colors.white, size: 20),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontFamily: 'Nunito',
+              ),
+            ),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white.withOpacity(0.8),
+                fontFamily: 'Nunito',
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

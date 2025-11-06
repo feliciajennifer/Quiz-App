@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../utils/constants.dart';
+import 'welcome_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,16 +27,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     
     _controller.forward();
     
-    _navigateToHome();
+    _navigateToWelcome();
   }
 
-  void _navigateToHome() async {
+  void _navigateToWelcome() async {
     await Future.delayed(const Duration(seconds: 3));
     
     if (mounted) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        '/home',
-        (route) => false,
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const WelcomePage()),
       );
     }
   }
