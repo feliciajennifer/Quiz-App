@@ -21,28 +21,44 @@ class AnswerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Color getBorderColor() {
       if (showCorrect) {
-        if (isCorrect) return AppConstants.correctColor;
-        if (isSelected && !isCorrect) return AppConstants.wrongColor;
+        if (isCorrect) return AppColors.success;
+        if (isSelected && !isCorrect) return AppColors.error;
       }
       return isSelected
-          ? Theme.of(context).primaryColor
+          ? AppColors.primary
           : Colors.grey[300]!;
     }
 
     Color getBackgroundColor() {
       if (showCorrect) {
-        if (isCorrect) return AppConstants.correctColor.withOpacity(0.1);
-        if (isSelected && !isCorrect) return AppConstants.wrongColor.withOpacity(0.1);
+        if (isCorrect) return AppColors.success.withOpacity(0.1);
+        if (isSelected && !isCorrect) return AppColors.error.withOpacity(0.1);
       }
       return isSelected
-          ? Theme.of(context).primaryColor.withOpacity(0.1)
-          : Colors.transparent;
+          ? AppColors.primary.withOpacity(0.1)
+          : Theme.of(context).cardColor;
+    }
+
+    IconData? getIcon() {
+      if (showCorrect) {
+        if (isCorrect) return Icons.check_circle;
+        if (isSelected && !isCorrect) return Icons.cancel;
+      }
+      return isSelected ? Icons.radio_button_checked : null;
+    }
+
+    Color getIconColor() {
+      if (showCorrect) {
+        if (isCorrect) return AppColors.success;
+        if (isSelected && !isCorrect) return AppColors.error;
+      }
+      return AppColors.primary;
     }
 
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+        borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
         side: BorderSide(
           color: getBorderColor(),
           width: 2,
@@ -50,32 +66,31 @@ class AnswerCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+        borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
         child: Container(
-          padding: const EdgeInsets.all(AppConstants.mediumPadding),
+          padding: const EdgeInsets.all(AppDimensions.mediumPadding),
           decoration: BoxDecoration(
             color: getBackgroundColor(),
-            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
           ),
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   answer,
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      ),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                    fontFamily: 'Nunito',
+                  ),
                 ),
               ),
-              if (showCorrect && isCorrect)
+              if (getIcon() != null)
                 Icon(
-                  Icons.check_circle,
-                  color: AppConstants.correctColor,
-                ),
-              if (showCorrect && isSelected && !isCorrect)
-                Icon(
-                  Icons.cancel,
-                  color: AppConstants.wrongColor,
+                  getIcon(),
+                  color: getIconColor(),
+                  size: 20,
                 ),
             ],
           ),
