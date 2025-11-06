@@ -1,23 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'models/theme_model.dart';
-import 'models/quiz_model.dart';
-import 'models/user_model.dart';
-import 'pages/splash_screen.dart';
-
-void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => ThemeModel()),
-        ChangeNotifierProvider(create: (context) => QuizModel()),
-        ChangeNotifierProvider(create: (context) => UserModel()),
-      ],
-      child: const MyApp(),
-    ),
-  );
-}
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -31,7 +11,15 @@ class MyApp extends StatelessWidget {
           darkTheme: themeModel.darkTheme,
           themeMode: themeModel.themeMode,
           debugShowCheckedModeBanner: false,
-          home: const SplashScreen(),
+          initialRoute: '/splash',
+          routes: {
+            '/splash': (context) => const SplashScreen(),
+            '/home': (context) => const HomePage(),
+            '/quizzes': (context) => const QuizzesPage(),
+            '/quiz_detail': (context) => const QuizDetailPage(),
+            '/quiz_play': (context) => const QuizPlayPage(),
+            '/result': (context) => const ResultPage(),
+          },
         );
       },
     );
