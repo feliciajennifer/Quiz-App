@@ -73,7 +73,6 @@ class _QuizzesPageState extends State<QuizzesPage> {
           ),
 
           if (!hasSelection) ...[
-            // Categories Grid Section (hanya tampil ketika belum pilih kategori)
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
