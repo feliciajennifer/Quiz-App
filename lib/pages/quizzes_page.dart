@@ -4,7 +4,6 @@ import '../models/quiz_model.dart';
 import '../utils/constants.dart';
 import '../utils/categories_data.dart';
 import '../utils/quiz_data.dart';
-import '../widgets/bottom_nav_bar.dart';
 import '../widgets/quiz_card.dart';
 import '../widgets/category_card.dart';
 
@@ -17,6 +16,7 @@ class QuizzesPage extends StatefulWidget {
 
 class _QuizzesPageState extends State<QuizzesPage> {
   final TextEditingController _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -37,10 +37,10 @@ class _QuizzesPageState extends State<QuizzesPage> {
       filtered = filtered.where((quiz) => quiz['category'] == selectedCategory).toList();
     }
 
-    // Filter by search query
     if (searchQuery.isNotEmpty) {
       filtered = filtered.where((quiz) =>
-          quiz['title'].toLowerCase().contains(searchQuery.toLowerCase())).toList();
+          quiz['title'].toLowerCase().contains(searchQuery.toLowerCase()) ||
+          quiz['category'].toLowerCase().contains(searchQuery.toLowerCase())).toList();
     }
 
     return filtered;
@@ -53,38 +53,60 @@ class _QuizzesPageState extends State<QuizzesPage> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(
-          'Explore Quizzes',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-      ),
-      body: Column(
-        children: [
-          // Search Bar
-          Padding(
-            padding: const EdgeInsets.all(AppDimensions.mediumPadding),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          SliverAppBar(
+            title: Text(
+              'Explore Quizzes',
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
+            ),
+            backgroundColor: AppColors.primary,
+            expandedHeight: 120,
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.primary, AppColors.secondary],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
               ),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search quizzes...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.mediumPadding,
-                    vertical: AppDimensions.smallPadding,
+            ),
+          ),
+
+          // Search Bar
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search by title or category...',
+                    prefixIcon: const Icon(Icons.search),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.mediumPadding,
+                      vertical: AppDimensions.smallPadding,
+                    ),
                   ),
                 ),
               ),
@@ -92,123 +114,215 @@ class _QuizzesPageState extends State<QuizzesPage> {
           ),
 
           // Categories Grid Section
-          Padding(
-            padding: const EdgeInsets.all(AppDimensions.mediumPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Quiz Categories',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                const SizedBox(height: AppDimensions.mediumPadding),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: AppDimensions.mediumPadding,
-                    mainAxisSpacing: AppDimensions.mediumPadding,
-                    childAspectRatio: 1.5,
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Quiz Categories',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
-                    return CategoryCard(
-                      category: category,
-                      onTap: () {
-                        quizModel.setCategory(category['name']);
-                      },
-                    );
-                  },
-                ),
-              ],
+                  const SizedBox(height: AppDimensions.mediumPadding),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: AppDimensions.mediumPadding,
+                      mainAxisSpacing: AppDimensions.mediumPadding,
+                      childAspectRatio: 1.5,
+                    ),
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      final category = categories[index];
+                      return CategoryCard(
+                        category: category,
+                        onTap: () {
+                          quizModel.setCategory(category['name']);
+                          // Scroll ke bagian quizzes
+                          _scrollController.animateTo(
+                            400,
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
 
-          SizedBox(
-            height: 60,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.mediumPadding,
-              ),
-              children: [
-                // All Categories
-                Padding(
-                  padding: const EdgeInsets.only(right: AppDimensions.smallPadding),
-                  child: FilterChip(
-                    label: const Text('All'),
-                    selected: quizModel.selectedCategory == 'All',
-                    onSelected: (selected) {
-                      quizModel.setCategory('All');
-                    },
-                    backgroundColor: Theme.of(context).cardColor,
-                    selectedColor: AppColors.primary,
-                    labelStyle: TextStyle(
-                      color: quizModel.selectedCategory == 'All' 
-                          ? Colors.white 
-                          : Theme.of(context).textTheme.bodyLarge?.color,
+          // Categories Horizontal Filter Chips
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 70,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: AppDimensions.smallPadding),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.mediumPadding,
+                    ),
+                    child: Text(
+                      'Filter by Category:',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
                   ),
-                ),
-                // Other Categories
-                ...categories.map((category) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: AppDimensions.smallPadding),
-                    child: FilterChip(
-                      label: Text(category['name']),
-                      selected: quizModel.selectedCategory == category['name'],
-                      onSelected: (selected) {
-                        quizModel.setCategory(category['name']);
-                      },
-                      backgroundColor: Theme.of(context).cardColor,
-                      selectedColor: Color(category['color']),
-                      labelStyle: TextStyle(
-                        color: quizModel.selectedCategory == category['name'] 
-                            ? Colors.white 
-                            : Theme.of(context).textTheme.bodyLarge?.color,
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppDimensions.mediumPadding,
+                      ),
+                      children: [
+                        // All Categories
+                        Padding(
+                          padding: const EdgeInsets.only(right: AppDimensions.smallPadding),
+                          child: FilterChip(
+                            label: const Text('All'),
+                            selected: quizModel.selectedCategory == 'All',
+                            onSelected: (selected) {
+                              quizModel.setCategory('All');
+                            },
+                            backgroundColor: Theme.of(context).cardColor,
+                            selectedColor: AppColors.primary,
+                            labelStyle: TextStyle(
+                              color: quizModel.selectedCategory == 'All' 
+                                  ? Colors.white 
+                                  : Theme.of(context).textTheme.bodyLarge?.color,
+                            ),
+                          ),
+                        ),
+                        // Other Categories
+                        ...categories.map((category) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: AppDimensions.smallPadding),
+                            child: FilterChip(
+                              label: Text(category['name']),
+                              selected: quizModel.selectedCategory == category['name'],
+                              onSelected: (selected) {
+                                quizModel.setCategory(category['name']);
+                              },
+                              backgroundColor: Theme.of(context).cardColor,
+                              selectedColor: Color(category['color']),
+                              labelStyle: TextStyle(
+                                color: quizModel.selectedCategory == category['name'] 
+                                    ? Colors.white 
+                                    : Theme.of(context).textTheme.bodyLarge?.color,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Quizzes Grid Header
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: AppDimensions.mediumPadding,
+                right: AppDimensions.mediumPadding,
+                top: AppDimensions.largePadding,
+                bottom: AppDimensions.mediumPadding,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    quizModel.selectedCategory == 'All' 
+                        ? 'All Quizzes' 
+                        : '${quizModel.selectedCategory} Quizzes',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: AppColors.primary.withOpacity(0.3),
                       ),
                     ),
-                  );
-                }).toList(),
-              ],
+                    child: Text(
+                      '${filteredQuizzes.length} quizzes',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary,
+                        fontFamily: 'Nunito',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 
           // Quizzes Grid
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(AppDimensions.mediumPadding),
-              child: filteredQuizzes.isEmpty
-                  ? const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.search_off, size: 60, color: Colors.grey),
-                          SizedBox(height: AppDimensions.mediumPadding),
-                          Text(
-                            'No quizzes found',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey,
-                              fontFamily: 'Nunito',
-                            ),
+          filteredQuizzes.isEmpty
+              ? SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppDimensions.largePadding),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.search_off,
+                          size: 80,
+                          color: Colors.grey.withOpacity(0.5),
+                        ),
+                        const SizedBox(height: AppDimensions.mediumPadding),
+                        Text(
+                          'No quizzes found',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey,
+                            fontFamily: 'Nunito',
                           ),
-                        ],
-                      ),
-                    )
-                  : GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: AppDimensions.mediumPadding,
-                        mainAxisSpacing: AppDimensions.mediumPadding,
-                        childAspectRatio: 0.8,
-                      ),
-                      itemCount: filteredQuizzes.length,
-                      itemBuilder: (context, index) {
+                        ),
+                        const SizedBox(height: AppDimensions.smallPadding),
+                        Text(
+                          'Try changing your search or filter',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey.withOpacity(0.7),
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : SliverPadding(
+                  padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+                  sliver: SliverGrid(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: AppDimensions.mediumPadding,
+                      mainAxisSpacing: AppDimensions.mediumPadding,
+                      childAspectRatio: 0.8,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
                         final quiz = filteredQuizzes[index];
                         return QuizCard(
                           quiz: quiz,
@@ -218,18 +332,19 @@ class _QuizzesPageState extends State<QuizzesPage> {
                           },
                         );
                       },
+                      childCount: filteredQuizzes.length,
                     ),
-            ),
-          ),
+                  ),
+                ),
         ],
       ),
-      bottomNavigationBar: const BottomNavBar(currentIndex: 1),
     );
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 }
