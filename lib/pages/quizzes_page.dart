@@ -132,52 +132,6 @@ class _QuizzesPageState extends State<QuizzesPage> {
           ],
 
           if (hasSelection) ...[
-            // Selected Category Info
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: AppDimensions.getMediumPadding(context),
-                  right: AppDimensions.getMediumPadding(context),
-                  top: AppDimensions.getLargePadding(context),
-                  bottom: AppDimensions.getMediumPadding(context),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '$_selectedCategory Quizzes',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: AppColors.primary.withOpacity(0.3),
-                        ),
-                      ),
-                      child: Text(
-                        '${categoryQuizzes.length} quiz${categoryQuizzes.length != 1 ? 'zes' : ''}',
-                        style: TextStyle(
-                          fontSize: AppDimensions.getBodyFontSize(context) - 4,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primary,
-                          fontFamily: 'Nunito',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // Quizzes Grid untuk kategori yang dipilih
             if (categoryQuizzes.isEmpty)
               SliverToBoxAdapter(
                 child: Padding(
