@@ -13,6 +13,14 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double getCardRadius() {
+      return 16.0; 
+    }
+
+    EdgeInsets getMediumPadding() {
+      return const EdgeInsets.all(16.0);
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -25,7 +33,7 @@ class CategoryCard extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+          borderRadius: BorderRadius.circular(getCardRadius()),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -42,19 +50,19 @@ class CategoryCard extends StatelessWidget {
               child: Opacity(
                 opacity: 0.3,
                 child: Text(
-                  category['icon'],
+                  category['icon'] ?? '📚',
                   style: const TextStyle(fontSize: 80),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+              padding: getMediumPadding(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    category['name'],
+                    category['name'] ?? 'Category', // Default name jika null
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -64,7 +72,7 @@ class CategoryCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${category['quizCount']} quiz${category['quizCount'] > 1 ? 'zes' : ''}',
+                    '${category['quizCount'] ?? 0} quiz${(category['quizCount'] ?? 0) > 1 ? 'zes' : ''}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.8),

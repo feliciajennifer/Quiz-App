@@ -55,10 +55,14 @@ class AnswerCard extends StatelessWidget {
       return AppColors.primary;
     }
 
+    double getCardRadius() {
+      return 12.0; 
+    }
+
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+        borderRadius: BorderRadius.circular(getCardRadius()),
         side: BorderSide(
           color: getBorderColor(),
           width: 2,
@@ -66,12 +70,12 @@ class AnswerCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+        borderRadius: BorderRadius.circular(getCardRadius()),
         child: Container(
-          padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+          padding: const EdgeInsets.all(16), 
           decoration: BoxDecoration(
             color: getBackgroundColor(),
-            borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+            borderRadius: BorderRadius.circular(getCardRadius()),
           ),
           child: Row(
             children: [

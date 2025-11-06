@@ -33,6 +33,8 @@ class ResultPage extends StatelessWidget {
     final quiz = quizModel.currentQuiz!;
     final score = quizModel.getScore();
     final total = quiz['questions'].length;
+    final missed = total - score;
+    final accuracy = ((score / total) * 100).toInt();
 
     // Save result to user history
     userModel.addQuizResult({
@@ -45,14 +47,14 @@ class ResultPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
           child: Column(
             children: [
               // Result Header
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(AppDimensions.largePadding),
+                padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -62,21 +64,31 @@ class ResultPage extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+                  borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
                 ),
                 child: Column(
                   children: [
                     Text(
                       _getResultMessage(score, total),
-                      style: const TextStyle(
-                        fontSize: 28,
+                      style: TextStyle(
+                        fontSize: AppDimensions.getTitleFontSize(context),
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         fontFamily: 'Nunito',
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: AppDimensions.mediumPadding),
+                    SizedBox(height: AppDimensions.getSmallPadding(context)),
+                    Text(
+                      'You got $score out of $total questions correct',
+                      style: TextStyle(
+                        fontSize: AppDimensions.getBodyFontSize(context),
+                        color: Colors.white.withOpacity(0.9),
+                        fontFamily: 'Nunito',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: AppDimensions.getMediumPadding(context)),
                     
                     // Score Circle
                     Container(
@@ -103,7 +115,7 @@ class ResultPage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '${((score / total) * 100).toInt()}%',
+                            '$accuracy%',
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.white,
@@ -117,34 +129,181 @@ class ResultPage extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: AppDimensions.largePadding),
+              SizedBox(height: AppDimensions.getLargePadding(context)),
+
+              Row(
+                children: [
+                  // Correct Answers
+                  Expanded(
+                    child: _buildStatCard(
+                      context,
+                      'Correct',
+                      score.toString(),
+                      AppColors.success,
+                      Icons.check_circle,
+                    ),
+                  ),
+                  SizedBox(width: AppDimensions.getSmallPadding(context)),
+                  // Missed Answers
+                  Expanded(
+                    child: _buildStatCard(
+                      context,
+                      'Missed',
+                      missed.toString(),
+                      AppColors.error,
+                      Icons.cancel,
+                    ),
+                  ),
+                  SizedBox(width: AppDimensions.getSmallPadding(context)),
+                  // Accuracy
+                  Expanded(
+                    child: _buildStatCard(
+                      context,
+                      'Accuracy',
+                      '$accuracy%',
+                      AppColors.primary,
+                      Icons.analytics,
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: AppDimensions.getLargePadding(context)),
 
               // Quiz Info
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+                  padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
                   child: Column(
                     children: [
                       Text(
                         quiz['title'],
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: AppDimensions.smallPadding),
+                      SizedBox(height: AppDimensions.getSmallPadding(context)),
                       Text(
                         quiz['category'],
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                      ),
+                      SizedBox(height: AppDimensions.getSmallPadding(context)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.timer,
+                            size: 16,
+                            color: AppColors.textSecondary,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            '${quiz['duration']} minutes',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                          ),
+                          SizedBox(width: 16),
+                          Icon(
+                            Icons.question_answer,
+                            size: 16,
+                            color: AppColors.textSecondary,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            '${quiz['questionCount']} questions',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
               ),
 
-              const SizedBox(height: AppDimensions.largePadding),
+              SizedBox(height: AppDimensions.getLargePadding(context)),
 
-              // Question Review
-              Expanded(
+              // Performance Message
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+                decoration: BoxDecoration(
+                  color: _getPerformanceColor(accuracy).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
+                  border: Border.all(
+                    color: _getPerformanceColor(accuracy).withOpacity(0.3),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      _getPerformanceIcon(accuracy),
+                      size: 40,
+                      color: _getPerformanceColor(accuracy),
+                    ),
+                    SizedBox(height: AppDimensions.getSmallPadding(context)),
+                    Text(
+                      _getPerformanceMessage(accuracy),
+                      style: TextStyle(
+                        fontSize: AppDimensions.getBodyFontSize(context),
+                        fontWeight: FontWeight.w600,
+                        color: _getPerformanceColor(accuracy),
+                        fontFamily: 'Nunito',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: AppDimensions.getLargePadding(context)),
+
+              // Question Review Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Question Review',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: AppColors.primary.withOpacity(0.3),
+                      ),
+                    ),
+                    child: Text(
+                      '$score/$total correct',
+                      style: TextStyle(
+                        fontSize: AppDimensions.getBodyFontSize(context) - 2,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary,
+                        fontFamily: 'Nunito',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: AppDimensions.getMediumPadding(context)),
+
+              // Question Review List
+              Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.3,
+                ),
                 child: ListView.builder(
+                  shrinkWrap: true,
                   itemCount: quiz['questions'].length,
                   itemBuilder: (context, index) {
                     final question = quiz['questions'][index];
@@ -152,7 +311,7 @@ class ResultPage extends StatelessWidget {
                     final isCorrect = userAnswer == question['correctAnswer'];
                     
                     return Card(
-                      margin: const EdgeInsets.only(bottom: AppDimensions.smallPadding),
+                      margin: EdgeInsets.only(bottom: AppDimensions.getSmallPadding(context)),
                       color: isCorrect 
                           ? AppColors.success.withOpacity(0.1)
                           : AppColors.error.withOpacity(0.1),
@@ -188,6 +347,8 @@ class ResultPage extends StatelessWidget {
                 ),
               ),
 
+              SizedBox(height: AppDimensions.getLargePadding(context)),
+
               // Action Buttons
               Row(
                 children: [
@@ -197,26 +358,32 @@ class ResultPage extends StatelessWidget {
                         quizModel.resetQuiz();
                         Navigator.pushNamedAndRemoveUntil(
                           context,
-                          '/home',
+                          '/main',
                           (route) => false,
                         );
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+                          borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
                         ),
                       ),
-                      child: const Text('Back to Home'),
+                      child: Text(
+                        'Back to Home',
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodyFontSize(context),
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Nunito',
+                        ),
+                      ),
                     ),
                   ),
                   
-                  const SizedBox(width: AppDimensions.smallPadding),
+                  SizedBox(width: AppDimensions.getSmallPadding(context)),
                   
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Reset answers but keep same quiz
                         quizModel.resetQuiz();
                         quizModel.setCurrentQuiz(quiz);
                         Navigator.pushReplacementNamed(context, '/quiz_play');
@@ -225,18 +392,90 @@ class ResultPage extends StatelessWidget {
                         backgroundColor: AppColors.primary,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+                          borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
                         ),
                       ),
-                      child: const Text('Try Again'),
+                      child: Text(
+                        'Try Again',
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodyFontSize(context),
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          fontFamily: 'Nunito',
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
+
+              SizedBox(height: MediaQuery.of(context).padding.bottom),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildStatCard(BuildContext context, String title, String value, Color color, IconData icon) {
+    return Container(
+      padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
+        border: Border.all(
+          color: color.withOpacity(0.3),
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: color,
+            size: 24,
+          ),
+          SizedBox(height: AppDimensions.getSmallPadding(context)),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: AppDimensions.getSubtitleFontSize(context),
+              fontWeight: FontWeight.bold,
+              color: color,
+              fontFamily: 'Nunito',
+            ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: AppDimensions.getBodyFontSize(context) - 2,
+              color: AppColors.textSecondary,
+              fontFamily: 'Nunito',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Color _getPerformanceColor(int accuracy) {
+    if (accuracy >= 80) return AppColors.success;
+    if (accuracy >= 60) return AppColors.warning;
+    return AppColors.error;
+  }
+
+  IconData _getPerformanceIcon(int accuracy) {
+    if (accuracy >= 80) return Icons.emoji_events;
+    if (accuracy >= 60) return Icons.thumb_up;
+    return Icons.lightbulb_outline;
+  }
+
+  String _getPerformanceMessage(int accuracy) {
+    if (accuracy >= 90) return 'Outstanding performance! You\'re a quiz master!';
+    if (accuracy >= 80) return 'Excellent work! You really know your stuff!';
+    if (accuracy >= 70) return 'Great job! You\'re on the right track!';
+    if (accuracy >= 60) return 'Good effort! Keep practicing to improve!';
+    if (accuracy >= 50) return 'Not bad! Review the material and try again!';
+    return 'Keep trying! Every attempt makes you better!';
   }
 }

@@ -28,12 +28,28 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('End the Quiz Already?'),
-        content: const Text('You still have some time left! Are you sure you want to submit your answers now?'),
+        title: Text(
+          'End the Quiz Already?',
+          style: TextStyle(
+            fontSize: AppDimensions.getBodyFontSize(context),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          'You still have some time left! Are you sure you want to submit your answers now?',
+          style: TextStyle(
+            fontSize: AppDimensions.getBodyFontSize(context) - 2,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                fontSize: AppDimensions.getBodyFontSize(context),
+              ),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -43,7 +59,12 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
             ),
-            child: const Text('Submit'),
+            child: Text(
+              'Submit',
+              style: TextStyle(
+                fontSize: AppDimensions.getBodyFontSize(context),
+              ),
+            ),
           ),
         ],
       ),
@@ -75,7 +96,7 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(AppDimensions.mediumPadding),
+        padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
         child: Column(
           children: [
             // Progress and Timer
@@ -88,7 +109,7 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                     valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                   ),
                 ),
-                const SizedBox(width: AppDimensions.mediumPadding),
+                SizedBox(width: AppDimensions.getMediumPadding(context)),
                 ProgressTimer(
                   totalTimeInSeconds: _totalTimeInSeconds,
                   onTimeUp: () {
@@ -98,20 +119,20 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
               ],
             ),
 
-            const SizedBox(height: AppDimensions.largePadding),
+            SizedBox(height: AppDimensions.getLargePadding(context)),
 
             // Question Number
             Text(
               'Question ${_currentQuestionIndex + 1} of ${questions.length}',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: AppDimensions.getBodyFontSize(context),
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Nunito',
               ),
             ),
 
-            const SizedBox(height: AppDimensions.mediumPadding),
+            SizedBox(height: AppDimensions.getMediumPadding(context)),
 
             // Question Card
             Expanded(
@@ -121,11 +142,11 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                     Card(
                       elevation: 4,
                       child: Padding(
-                        padding: const EdgeInsets.all(AppDimensions.largePadding),
+                        padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
                         child: Text(
                           currentQuestion['question'],
-                          style: const TextStyle(
-                            fontSize: 20,
+                          style: TextStyle(
+                            fontSize: AppDimensions.getSubtitleFontSize(context),
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Nunito',
                           ),
@@ -134,7 +155,7 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                       ),
                     ),
 
-                    const SizedBox(height: AppDimensions.largePadding),
+                    SizedBox(height: AppDimensions.getLargePadding(context)),
 
                     // Answers
                     ListView.builder(
@@ -147,7 +168,7 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                         final isCorrect = index == currentQuestion['correctAnswer'];
                         
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: AppDimensions.smallPadding),
+                          padding: EdgeInsets.only(bottom: AppDimensions.getSmallPadding(context)),
                           child: AnswerCard(
                             answer: answer,
                             isSelected: isSelected,
@@ -163,6 +184,8 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                         );
                       },
                     ),
+
+                    SizedBox(height: AppDimensions.getMediumPadding(context)),
                   ],
                 ),
               ),
@@ -184,15 +207,21 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+                          borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
                         ),
                       ),
-                      child: const Text('Previous'),
+                      child: Text(
+                        'Previous',
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodyFontSize(context),
+                          fontFamily: 'Nunito',
+                        ),
+                      ),
                     ),
                   ),
                 
                 if (_currentQuestionIndex > 0) 
-                  const SizedBox(width: AppDimensions.smallPadding),
+                  SizedBox(width: AppDimensions.getSmallPadding(context)),
                 
                 // Next/Check/Submit Button
                 Expanded(
@@ -201,8 +230,13 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                     onPressed: () {
                       if (userAnswer == null && !_showResult) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please select an answer first!'),
+                          SnackBar(
+                            content: Text(
+                              'Please select an answer first!',
+                              style: TextStyle(
+                                fontSize: AppDimensions.getBodyFontSize(context) - 2,
+                              ),
+                            ),
                           ),
                         );
                         return;
@@ -227,7 +261,7 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+                        borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
                       ),
                     ),
                     child: Text(
@@ -236,9 +270,9 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                               ? 'Next Question' 
                               : 'Submit Quiz')
                           : 'Check Answer',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: AppDimensions.getBodyFontSize(context),
                         fontFamily: 'Nunito',
                       ),
                     ),
@@ -246,6 +280,8 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                 ),
               ],
             ),
+
+            SizedBox(height: MediaQuery.of(context).padding.bottom),
           ],
         ),
       ),

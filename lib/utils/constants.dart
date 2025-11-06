@@ -16,7 +16,6 @@ class AppColors {
 }
 
 class AppDimensions {
-  // Responsive padding based on screen size
   static double getSmallPadding(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return width < 360 ? 6.0 : 8.0;
@@ -32,7 +31,6 @@ class AppDimensions {
     return width < 360 ? 16.0 : 24.0;
   }
 
-  // Responsive font sizes
   static double getTitleFontSize(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return width < 360 ? 28.0 : 32.0;
@@ -48,7 +46,6 @@ class AppDimensions {
     return width < 360 ? 14.0 : 16.0;
   }
 
-  // Responsive card dimensions
   static double getCardRadius(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return width < 360 ? 12.0 : 16.0;
@@ -59,7 +56,6 @@ class AppDimensions {
     return width < 360 ? 10.0 : 12.0;
   }
 
-  // Grid layout responsive
   static int getGridCrossAxisCount(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     if (width < 400) return 2;

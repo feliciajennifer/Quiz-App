@@ -32,7 +32,7 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       backgroundColor: AppColors.primary,
       body: SafeArea(
-        child: SingleChildScrollView( // TAMBAH SINGLE CHILD SCROLL VIEW
+        child: SingleChildScrollView( 
           padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
           child: ConstrainedBox(
             constraints: BoxConstraints(

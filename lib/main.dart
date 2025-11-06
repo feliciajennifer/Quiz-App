@@ -32,8 +32,18 @@ class MyApp extends StatelessWidget {
       builder: (context, themeModel, child) {
         return MaterialApp(
           title: 'Thinkzone',
-          theme: themeModel.lightTheme(context), // PASS CONTEXT
-          darkTheme: themeModel.darkTheme(context), // PASS CONTEXT
+          theme: ThemeData(
+            // Light theme configuration
+            primarySwatch: Colors.green,
+            brightness: Brightness.light,
+            fontFamily: 'Nunito',
+          ),
+          darkTheme: ThemeData(
+            // Dark theme configuration
+            primarySwatch: Colors.green,
+            brightness: Brightness.dark,
+            fontFamily: 'Nunito',
+          ),
           themeMode: themeModel.themeMode,
           debugShowCheckedModeBanner: false,
           home: const SplashScreen(),

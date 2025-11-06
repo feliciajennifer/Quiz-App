@@ -77,15 +77,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   color: AppColors.primary,
                 ),
               ),
-              const SizedBox(height: AppDimensions.largePadding),
+              const SizedBox(height: 24),
               Text(
                 'Thinkzone',
-                style: AppTextStyles.playfulTitle.copyWith(
-                  color: Colors.white,
+                style: TextStyle(
                   fontSize: 40,
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'Nunito',
+                  color: Colors.white,
                 ),
               ),
-              const SizedBox(height: AppDimensions.mediumPadding),
+              const SizedBox(height: 16),
               const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),

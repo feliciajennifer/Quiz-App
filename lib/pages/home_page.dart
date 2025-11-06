@@ -38,7 +38,6 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome Section yang responsive
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
@@ -145,8 +144,6 @@ class HomePage extends StatelessWidget {
             ),
 
             SizedBox(height: AppDimensions.getLargePadding(context)),
-
-            // Popular Quizzes Section - Responsive height
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -182,9 +179,8 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(height: AppDimensions.getMediumPadding(context)),
 
-            // Popular Quizzes List - Responsive height
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.28, // Responsive height
+              height: MediaQuery.of(context).size.height * 0.28,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: popularQuizzes.length,
@@ -247,7 +243,6 @@ class HomePage extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Bottom nav akan otomatis berpindah ke index 1
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
