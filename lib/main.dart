@@ -3,8 +3,12 @@ import 'package:provider/provider.dart';
 import 'models/theme_model.dart';
 import 'models/quiz_model.dart';
 import 'models/user_model.dart';
-import 'services/navigation_service.dart';
 import 'pages/splash_screen.dart';
+import 'pages/home_page.dart';
+import 'pages/quizzes_page.dart';
+import 'pages/quiz_detail_page.dart';
+import 'pages/quiz_play_page.dart';
+import 'pages/result_page.dart';
 
 void main() {
   runApp(
@@ -13,7 +17,6 @@ void main() {
         ChangeNotifierProvider(create: (context) => ThemeModel()),
         ChangeNotifierProvider(create: (context) => QuizModel()),
         ChangeNotifierProvider(create: (context) => UserModel()),
-        Provider<NavigationService>(create: (context) => NavigationService()),
       ],
       child: const MyApp(),
     ),
@@ -25,8 +28,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navigationService = Provider.of<NavigationService>(context, listen: false);
-
     return Consumer<ThemeModel>(
       builder: (context, themeModel, child) {
         return MaterialApp(
@@ -35,7 +36,6 @@ class MyApp extends StatelessWidget {
           darkTheme: themeModel.darkTheme,
           themeMode: themeModel.themeMode,
           debugShowCheckedModeBanner: false,
-          navigatorKey: navigationService.navigatorKey,
           initialRoute: '/splash',
           routes: {
             '/splash': (context) => const SplashScreen(),
