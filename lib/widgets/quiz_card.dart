@@ -134,45 +134,21 @@ class QuizCard extends StatelessWidget {
                     ),
                     
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.question_answer,
-                              size: iconSize - 20,
-                              color: AppColors.primary,
-                            ),
-                            const SizedBox(width: 2),
-                            Text(
-                              '${quiz['questionCount'] ?? 0}',
-                              style: TextStyle(
-                                fontSize: fontSizeSmall,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(context).textTheme.bodyLarge?.color,
-                                fontFamily: 'Nunito',
-                              ),
-                            ),
-                          ],
+                        Icon(
+                          Icons.question_answer,
+                          size: iconSize - 20,
+                          color: AppColors.primary,
                         ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.timer,
-                              size: iconSize - 20,
-                              color: AppColors.primary,
-                            ),
-                            const SizedBox(width: 2),
-                            Text(
-                              '${quiz['duration'] ?? 5}m',
-                              style: TextStyle(
-                                fontSize: fontSizeSmall,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(context).textTheme.bodyLarge?.color,
-                                fontFamily: 'Nunito',
-                              ),
-                            ),
-                          ],
+                        const SizedBox(width: 4),
+                        Text(
+                          '${quiz['questionCount'] ?? 0} Questions',
+                          style: TextStyle(
+                            fontSize: fontSizeSmall,
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                            fontFamily: 'Nunito',
+                          ),
                         ),
                       ],
                     ),

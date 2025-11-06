@@ -110,7 +110,6 @@ class QuizDetailPage extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Quiz Info Cards
             Row(
               children: [
                 Expanded(
@@ -119,15 +118,6 @@ class QuizDetailPage extends StatelessWidget {
                     Icons.question_answer_outlined,
                     'Questions',
                     '${quiz['questionCount']}',
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildInfoCard(
-                    context,
-                    Icons.timer_outlined,
-                    'Duration',
-                    '${quiz['duration']} min',
                   ),
                 ),
                 const SizedBox(width: 12),

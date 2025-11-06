@@ -22,7 +22,7 @@ class ResultPage extends StatelessWidget {
     final percentage = (score / total) * 100;
     
     if (percentage >= 80) return AppColors.success;
-    if (percentage >= 60) return AppColors.warning;
+    if (percentage >= 60) return const Color(0xFFFF9800);
     return AppColors.error;
   }
 
@@ -48,13 +48,13 @@ class ResultPage extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               // Result Header
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
+                padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -64,31 +64,31 @@ class ResultPage extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
                   children: [
                     Text(
                       _getResultMessage(score, total),
-                      style: TextStyle(
-                        fontSize: AppDimensions.getTitleFontSize(context),
+                      style: const TextStyle(
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         fontFamily: 'Nunito',
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: AppDimensions.getSmallPadding(context)),
+                    const SizedBox(height: 8),
                     Text(
                       'You got $score out of $total questions correct',
                       style: TextStyle(
-                        fontSize: AppDimensions.getBodyFontSize(context),
+                        fontSize: 16,
                         color: Colors.white.withOpacity(0.9),
                         fontFamily: 'Nunito',
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: AppDimensions.getMediumPadding(context)),
+                    const SizedBox(height: 16),
                     
                     // Score Circle
                     Container(
@@ -129,7 +129,7 @@ class ResultPage extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: AppDimensions.getLargePadding(context)),
+              const SizedBox(height: 24),
 
               Row(
                 children: [
@@ -143,7 +143,7 @@ class ResultPage extends StatelessWidget {
                       Icons.check_circle,
                     ),
                   ),
-                  SizedBox(width: AppDimensions.getSmallPadding(context)),
+                  const SizedBox(width: 8),
                   // Missed Answers
                   Expanded(
                     child: _buildStatCard(
@@ -154,7 +154,7 @@ class ResultPage extends StatelessWidget {
                       Icons.cancel,
                     ),
                   ),
-                  SizedBox(width: AppDimensions.getSmallPadding(context)),
+                  const SizedBox(width: 8),
                   // Accuracy
                   Expanded(
                     child: _buildStatCard(
@@ -168,73 +168,15 @@ class ResultPage extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: AppDimensions.getLargePadding(context)),
-
-              // Quiz Info
-              Card(
-                child: Padding(
-                  padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
-                  child: Column(
-                    children: [
-                      Text(
-                        quiz['title'],
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: AppDimensions.getSmallPadding(context)),
-                      Text(
-                        quiz['category'],
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                      ),
-                      SizedBox(height: AppDimensions.getSmallPadding(context)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.timer,
-                            size: 16,
-                            color: AppColors.textSecondary,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '${quiz['duration']} minutes',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
-                          ),
-                          SizedBox(width: 16),
-                          Icon(
-                            Icons.question_answer,
-                            size: 16,
-                            color: AppColors.textSecondary,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '${quiz['questionCount']} questions',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              SizedBox(height: AppDimensions.getLargePadding(context)),
+              const SizedBox(height: 24),
 
               // Performance Message
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: _getPerformanceColor(accuracy).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: _getPerformanceColor(accuracy).withOpacity(0.3),
                   ),
@@ -246,11 +188,11 @@ class ResultPage extends StatelessWidget {
                       size: 40,
                       color: _getPerformanceColor(accuracy),
                     ),
-                    SizedBox(height: AppDimensions.getSmallPadding(context)),
+                    const SizedBox(height: 8),
                     Text(
                       _getPerformanceMessage(accuracy),
                       style: TextStyle(
-                        fontSize: AppDimensions.getBodyFontSize(context),
+                        fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: _getPerformanceColor(accuracy),
                         fontFamily: 'Nunito',
@@ -261,93 +203,7 @@ class ResultPage extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: AppDimensions.getLargePadding(context)),
-
-              // Question Review Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Question Review',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: AppColors.primary.withOpacity(0.3),
-                      ),
-                    ),
-                    child: Text(
-                      '$score/$total correct',
-                      style: TextStyle(
-                        fontSize: AppDimensions.getBodyFontSize(context) - 2,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primary,
-                        fontFamily: 'Nunito',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: AppDimensions.getMediumPadding(context)),
-
-              // Question Review List
-              Container(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.3,
-                ),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: quiz['questions'].length,
-                  itemBuilder: (context, index) {
-                    final question = quiz['questions'][index];
-                    final userAnswer = quizModel.userAnswers[index];
-                    final isCorrect = userAnswer == question['correctAnswer'];
-                    
-                    return Card(
-                      margin: EdgeInsets.only(bottom: AppDimensions.getSmallPadding(context)),
-                      color: isCorrect 
-                          ? AppColors.success.withOpacity(0.1)
-                          : AppColors.error.withOpacity(0.1),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: isCorrect ? AppColors.success : AppColors.error,
-                          child: Icon(
-                            isCorrect ? Icons.check : Icons.close,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                        title: Text(
-                          'Question ${index + 1}',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                        ),
-                        subtitle: Text(
-                          isCorrect ? 'Correct' : 'Incorrect',
-                          style: TextStyle(
-                            color: isCorrect ? AppColors.success : AppColors.error,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        trailing: Text(
-                          '${index + 1}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              SizedBox(height: AppDimensions.getLargePadding(context)),
+              const SizedBox(height: 32),
 
               // Action Buttons
               Row(
@@ -365,21 +221,23 @@ class ResultPage extends StatelessWidget {
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
+                          borderRadius: BorderRadius.circular(12),
                         ),
+                        side: const BorderSide(color: AppColors.primary),
                       ),
                       child: Text(
                         'Back to Home',
                         style: TextStyle(
-                          fontSize: AppDimensions.getBodyFontSize(context),
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          color: AppColors.primary,
                           fontFamily: 'Nunito',
                         ),
                       ),
                     ),
                   ),
                   
-                  SizedBox(width: AppDimensions.getSmallPadding(context)),
+                  const SizedBox(width: 12),
                   
                   Expanded(
                     child: ElevatedButton(
@@ -390,17 +248,17 @@ class ResultPage extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         'Try Again',
                         style: TextStyle(
-                          fontSize: AppDimensions.getBodyFontSize(context),
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
                           fontFamily: 'Nunito',
                         ),
                       ),
@@ -409,7 +267,7 @@ class ResultPage extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: MediaQuery.of(context).padding.bottom),
+              const SizedBox(height: 16),
             ],
           ),
         ),
@@ -419,10 +277,10 @@ class ResultPage extends StatelessWidget {
 
   Widget _buildStatCard(BuildContext context, String title, String value, Color color, IconData icon) {
     return Container(
-      padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: color.withOpacity(0.3),
         ),
@@ -434,22 +292,22 @@ class ResultPage extends StatelessWidget {
             color: color,
             size: 24,
           ),
-          SizedBox(height: AppDimensions.getSmallPadding(context)),
+          const SizedBox(height: 8),
           Text(
             value,
             style: TextStyle(
-              fontSize: AppDimensions.getSubtitleFontSize(context),
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: color,
               fontFamily: 'Nunito',
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             title,
-            style: TextStyle(
-              fontSize: AppDimensions.getBodyFontSize(context) - 2,
-              color: AppColors.textSecondary,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.grey,
               fontFamily: 'Nunito',
             ),
           ),
@@ -460,7 +318,7 @@ class ResultPage extends StatelessWidget {
 
   Color _getPerformanceColor(int accuracy) {
     if (accuracy >= 80) return AppColors.success;
-    if (accuracy >= 60) return AppColors.warning;
+    if (accuracy >= 60) return const Color(0xFFFF9800);
     return AppColors.error;
   }
 
