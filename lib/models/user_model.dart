@@ -30,4 +30,6 @@ class UserModel with ChangeNotifier {
     _quizHistory = [];
     notifyListeners();
   }
+
+  bool get isLoggedIn => _name.isNotEmpty;
 }
