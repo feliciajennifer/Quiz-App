@@ -39,168 +39,165 @@ class _QuizzesPageState extends State<QuizzesPage> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: Text(
-              hasSelection ? '$_selectedCategory Quizzes' : 'Explore Quizzes',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            backgroundColor: AppColors.primary,
-            expandedHeight: 120,
-            floating: false,
-            pinned: true,
-            leading: hasSelection
-                ? IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: _resetSelection,
-                  )
-                : null,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.primary, AppColors.secondary],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
+      appBar: AppBar(
+        title: Text(
+          hasSelection ? '$_selectedCategory Quizzes' : 'Explore Quizzes',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600, 
+            color: Colors.white,
+            fontFamily: 'Nunito',
+          ),
+        ),
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        leading: hasSelection
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, size: 20),
+                onPressed: _resetSelection,
+              )
+            : null,
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: hasSelection 
+          ? _buildQuizzesGrid(quizModel, categoryQuizzes)
+          : _buildCategoriesGrid(),
+    );
+  }
+
+  Widget _buildCategoriesGrid() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Quiz Categories',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: Theme.of(context).textTheme.headlineMedium?.color,
+              fontFamily: 'Nunito',
             ),
           ),
-
-          if (!hasSelection) ...[
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Quiz Categories',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    SizedBox(height: AppDimensions.getMediumPadding(context)),
-                    Text(
-                      'Choose a category to explore quizzes',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
-                          ),
-                    ),
-                    SizedBox(height: AppDimensions.getLargePadding(context)),
-                  ],
-                ),
-              ),
+          SizedBox(height: 8),
+          Text(
+            'Choose a category to explore quizzes',
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
+              fontFamily: 'Nunito',
             ),
-
-            // Categories Grid
-            SliverPadding(
-              padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: AppDimensions.getGridCrossAxisCount(context),
-                  crossAxisSpacing: AppDimensions.getMediumPadding(context),
-                  mainAxisSpacing: AppDimensions.getMediumPadding(context),
-                  childAspectRatio: 1.2,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final category = categories[index];
-                    final quizCount = _quizzesByCategory[category['name']]?.length ?? 0;
-                    
-                    return CategoryCard(
-                      category: {
-                        ...category,
-                        'quizCount': quizCount,
-                      },
-                      onTap: () {
-                        setState(() {
-                          _selectedCategory = category['name'];
-                        });
-                      },
-                    );
-                  },
-                  childCount: categories.length,
-                ),
-              ),
+          ),
+          SizedBox(height: AppDimensions.getLargePadding(context)),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: AppDimensions.getGridCrossAxisCount(context),
+              crossAxisSpacing: AppDimensions.getMediumPadding(context),
+              mainAxisSpacing: AppDimensions.getMediumPadding(context),
+              childAspectRatio: 1.2,
             ),
-          ],
-
-          if (hasSelection) ...[
-            if (categoryQuizzes.isEmpty)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.quiz_outlined,
-                        size: 80,
-                        color: Colors.grey.withOpacity(0.5),
-                      ),
-                      SizedBox(height: AppDimensions.getMediumPadding(context)),
-                      Text(
-                        'No quizzes available in $_selectedCategory',
-                        style: TextStyle(
-                          fontSize: AppDimensions.getBodyFontSize(context),
-                          color: Colors.grey,
-                          fontFamily: 'Nunito',
-                        ),
-                      ),
-                      SizedBox(height: AppDimensions.getSmallPadding(context)),
-                      Text(
-                        'Check back later for new quizzes!',
-                        style: TextStyle(
-                          fontSize: AppDimensions.getBodyFontSize(context) - 2,
-                          color: Colors.grey.withOpacity(0.7),
-                          fontFamily: 'Nunito',
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: AppDimensions.getMediumPadding(context)),
-                      ElevatedButton(
-                        onPressed: _resetSelection,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                        ),
-                        child: const Text('Back to Categories'),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            else
-              SliverPadding(
-                padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: AppDimensions.getGridCrossAxisCount(context),
-                    crossAxisSpacing: AppDimensions.getMediumPadding(context),
-                    mainAxisSpacing: AppDimensions.getMediumPadding(context),
-                    childAspectRatio: 0.8,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final quiz = categoryQuizzes[index];
-                      return QuizCard(
-                        quiz: quiz,
-                        onTap: () {
-                          quizModel.setCurrentQuiz(quiz);
-                          Navigator.pushNamed(context, '/quiz_detail');
-                        },
-                      );
-                    },
-                    childCount: categoryQuizzes.length,
-                  ),
-                ),
-              ),
-          ],
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              final category = categories[index];
+              final quizCount = _quizzesByCategory[category['name']]?.length ?? 0;
+              
+              return CategoryCard(
+                category: {
+                  ...category,
+                  'quizCount': quizCount,
+                },
+                onTap: () {
+                  setState(() {
+                    _selectedCategory = category['name'];
+                  });
+                },
+              );
+            },
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildQuizzesGrid(QuizModel quizModel, List<Map<String, dynamic>> categoryQuizzes) {
+    if (categoryQuizzes.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.quiz_outlined,
+                size: 60, 
+                color: Colors.grey.withOpacity(0.5),
+              ),
+              SizedBox(height: 16), 
+              Text(
+                'No quizzes available',
+                style: TextStyle(
+                  fontSize: 16, 
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey,
+                  fontFamily: 'Nunito',
+                ),
+              ),
+              SizedBox(height: 8), 
+              Text(
+                'Check back later for new $_selectedCategory quizzes!',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.withOpacity(0.7),
+                  fontFamily: 'Nunito',
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _resetSelection,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                child: Text(
+                  'Back to Categories',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Nunito',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: AppDimensions.getGridCrossAxisCount(context),
+          crossAxisSpacing: AppDimensions.getMediumPadding(context),
+          mainAxisSpacing: AppDimensions.getMediumPadding(context),
+          childAspectRatio: 0.8,
+        ),
+        itemCount: categoryQuizzes.length,
+        itemBuilder: (context, index) {
+          final quiz = categoryQuizzes[index];
+          return QuizCard(
+            quiz: quiz,
+            onTap: () {
+              quizModel.setCurrentQuiz(quiz);
+              Navigator.pushNamed(context, '/quiz_detail');
+            },
+          );
+        },
       ),
     );
   }

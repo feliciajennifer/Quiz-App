@@ -38,7 +38,6 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome Section
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
@@ -146,15 +145,17 @@ class HomePage extends StatelessWidget {
 
             SizedBox(height: AppDimensions.getLargePadding(context)),
 
-            // Popular Quizzes
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Popular Quizzes',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: TextStyle(
+                    fontSize: 22, 
+                    fontWeight: FontWeight.w700,
+                    color: Theme.of(context).textTheme.headlineMedium?.color,
+                    fontFamily: 'Nunito',
+                  ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -182,7 +183,6 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(height: AppDimensions.getMediumPadding(context)),
 
-            // Popular Quizzes 
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.28,
               child: ListView.builder(
