@@ -11,11 +11,16 @@ class ThemeSwitcher extends StatelessWidget {
     final isDark = themeModel.themeMode == ThemeMode.dark;
 
     return IconButton(
-      icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+      icon: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: isDark
+            ? const Icon(Icons.light_mode, key: ValueKey('light'))
+            : const Icon(Icons.dark_mode, key: ValueKey('dark')),
+      ),
       onPressed: () {
-        themeModel.toggleTheme(!isDark);
+        themeModel.toggleTheme();
       },
-      tooltip: isDark ? 'Light Mode' : 'Dark Mode',
+      tooltip: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
     );
   }
 }
