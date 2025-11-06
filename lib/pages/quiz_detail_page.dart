@@ -110,6 +110,7 @@ class QuizDetailPage extends StatelessWidget {
 
             const SizedBox(height: 24),
 
+            // Quiz Info Cards
             Row(
               children: [
                 Expanded(
@@ -152,7 +153,8 @@ class QuizDetailPage extends StatelessWidget {
                 color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Theme.of(context).dividerColor.withOpacity(0.2),
+                  color: AppColors.primary.withOpacity(0.5),
+                  width: 1.5,
                 ),
               ),
               child: Text(
@@ -209,7 +211,8 @@ class QuizDetailPage extends StatelessWidget {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Theme.of(context).dividerColor.withOpacity(0.1),
+          color: AppColors.primary.withOpacity(0.5),
+          width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
