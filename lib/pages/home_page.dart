@@ -38,6 +38,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Welcome Section
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
@@ -95,7 +96,7 @@ class HomePage extends StatelessWidget {
                                 fontFamily: 'Nunito',
                               ),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Text(
                               "Ready to challenge your mind?",
                               style: TextStyle(
@@ -127,7 +128,7 @@ class HomePage extends StatelessWidget {
                           color: Colors.white,
                           size: 16,
                         ),
-                        SizedBox(width: 6),
+                        const SizedBox(width: 6),
                         Text(
                           'Let\'s learn something new today!',
                           style: TextStyle(
@@ -144,6 +145,8 @@ class HomePage extends StatelessWidget {
             ),
 
             SizedBox(height: AppDimensions.getLargePadding(context)),
+
+            // Popular Quizzes
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -179,6 +182,7 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(height: AppDimensions.getMediumPadding(context)),
 
+            // Popular Quizzes 
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.28,
               child: ListView.builder(
@@ -201,68 +205,6 @@ class HomePage extends StatelessWidget {
                     ),
                   );
                 },
-              ),
-            ),
-
-            SizedBox(height: AppDimensions.getLargePadding(context)),
-
-            // Explore More Section
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppDimensions.getCardRadius(context)),
-                border: Border.all(
-                  color: Theme.of(context).dividerColor.withOpacity(0.3),
-                ),
-                color: Theme.of(context).cardColor,
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.explore,
-                    size: 50,
-                    color: AppColors.primary,
-                  ),
-                  SizedBox(height: AppDimensions.getMediumPadding(context)),
-                  Text(
-                    'Explore More Quizzes',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  SizedBox(height: AppDimensions.getSmallPadding(context)),
-                  Text(
-                    'Discover hundreds of quizzes across different categories',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: AppDimensions.getMediumPadding(context)),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
-                        ),
-                        elevation: 2,
-                      ),
-                      child: Text(
-                        'Browse All Quizzes',
-                        style: TextStyle(
-                          fontSize: AppDimensions.getBodyFontSize(context),
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontFamily: 'Nunito',
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ),
           ],

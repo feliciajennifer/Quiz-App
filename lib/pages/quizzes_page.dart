@@ -15,20 +15,27 @@ class QuizzesPage extends StatefulWidget {
 }
 
 class _QuizzesPageState extends State<QuizzesPage> {
-  String _selectedCategory = 'All';
+  String? _selectedCategory;
   final Map<String, List<Map<String, dynamic>>> _quizzesByCategory = getQuizzesByCategory();
 
   List<Map<String, dynamic>> getQuizzesForSelectedCategory() {
-    if (_selectedCategory == 'All') {
-      return allQuizzes;
+    if (_selectedCategory == null) {
+      return [];
     }
     return _quizzesByCategory[_selectedCategory] ?? [];
+  }
+
+  void _resetSelection() {
+    setState(() {
+      _selectedCategory = null;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final quizModel = Provider.of<QuizModel>(context);
     final categoryQuizzes = getQuizzesForSelectedCategory();
+    final hasSelection = _selectedCategory != null;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -36,7 +43,7 @@ class _QuizzesPageState extends State<QuizzesPage> {
         slivers: [
           SliverAppBar(
             title: Text(
-              'Explore Quizzes',
+              hasSelection ? '$_selectedCategory Quizzes' : 'Explore Quizzes',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -46,6 +53,12 @@ class _QuizzesPageState extends State<QuizzesPage> {
             expandedHeight: 120,
             floating: false,
             pinned: true,
+            leading: hasSelection
+                ? IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: _resetSelection,
+                  )
+                : null,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: BoxDecoration(
@@ -59,175 +72,181 @@ class _QuizzesPageState extends State<QuizzesPage> {
             ),
           ),
 
-          // Categories Grid Section
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(AppDimensions.mediumPadding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Quiz Categories',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: AppDimensions.mediumPadding),
-                  GridView.builder(
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: AppDimensions.getGridCrossAxisCount(context),
-    crossAxisSpacing: AppDimensions.getMediumPadding(context),
-    mainAxisSpacing: AppDimensions.getMediumPadding(context),
-    childAspectRatio: AppDimensions.getGridChildAspectRatio(context),
-  ),
-  itemCount: categories.length,
-  itemBuilder: (context, index) {
-    final category = categories[index];
-    return CategoryCard(
-      category: category,
-      onTap: () {
-        setState(() {
-          _selectedCategory = category['name'];
-        });
-      },
-    );
-  },
-),
-
-// Di bagian SliverGrid untuk quizzes, ganti dengan:
-SliverPadding(
-  padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
-  sliver: SliverGrid(
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: AppDimensions.getGridCrossAxisCount(context),
-      crossAxisSpacing: AppDimensions.getMediumPadding(context),
-      mainAxisSpacing: AppDimensions.getMediumPadding(context),
-      childAspectRatio: 0.8,
-    ),
-    delegate: SliverChildBuilderDelegate(
-      (context, index) {
-        final quiz = categoryQuizzes[index];
-        return QuizCard(
-          quiz: quiz,
-          onTap: () {
-            quizModel.setCurrentQuiz(quiz);
-            Navigator.pushNamed(context, '/quiz_detail');
-          },
-        );
-      },
-      childCount: categoryQuizzes.length,
-    ),
-  ),
-),
-
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: AppDimensions.mediumPadding,
-                right: AppDimensions.mediumPadding,
-                top: AppDimensions.largePadding,
-                bottom: AppDimensions.mediumPadding,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _selectedCategory == 'All' 
-                        ? 'All Quizzes' 
-                        : '${_selectedCategory} Quizzes',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: AppColors.primary.withOpacity(0.3),
-                      ),
-                    ),
-                    child: Text(
-                      '${categoryQuizzes.length} quiz${categoryQuizzes.length != 1 ? 'zes' : ''}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primary,
-                        fontFamily: 'Nunito',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // Quizzes Grid
-          if (categoryQuizzes.isEmpty)
+          if (!hasSelection) ...[
+            // Categories Grid Section (hanya tampil ketika belum pilih kategori)
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(AppDimensions.largePadding),
+                padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.quiz_outlined,
-                      size: 80,
-                      color: Colors.grey.withOpacity(0.5),
-                    ),
-                    const SizedBox(height: AppDimensions.mediumPadding),
                     Text(
-                      'No quizzes available',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey,
-                        fontFamily: 'Nunito',
-                      ),
+                      'Quiz Categories',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
-                    const SizedBox(height: AppDimensions.smallPadding),
+                    SizedBox(height: AppDimensions.getMediumPadding(context)),
                     Text(
-                      'Check back later for new quizzes!',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.withOpacity(0.7),
-                        fontFamily: 'Nunito',
+                      'Choose a category to explore quizzes',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
+                          ),
+                    ),
+                    SizedBox(height: AppDimensions.getLargePadding(context)),
+                  ],
+                ),
+              ),
+            ),
+
+            // Categories Grid
+            SliverPadding(
+              padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: AppDimensions.getGridCrossAxisCount(context),
+                  crossAxisSpacing: AppDimensions.getMediumPadding(context),
+                  mainAxisSpacing: AppDimensions.getMediumPadding(context),
+                  childAspectRatio: 1.2,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final category = categories[index];
+                    final quizCount = _quizzesByCategory[category['name']]?.length ?? 0;
+                    
+                    return CategoryCard(
+                      category: {
+                        ...category,
+                        'quizCount': quizCount,
+                      },
+                      onTap: () {
+                        setState(() {
+                          _selectedCategory = category['name'];
+                        });
+                      },
+                    );
+                  },
+                  childCount: categories.length,
+                ),
+              ),
+            ),
+          ],
+
+          if (hasSelection) ...[
+            // Selected Category Info
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: AppDimensions.getMediumPadding(context),
+                  right: AppDimensions.getMediumPadding(context),
+                  top: AppDimensions.getLargePadding(context),
+                  bottom: AppDimensions.getMediumPadding(context),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '$_selectedCategory Quizzes',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
                       ),
-                      textAlign: TextAlign.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppColors.primary.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Text(
+                        '${categoryQuizzes.length} quiz${categoryQuizzes.length != 1 ? 'zes' : ''}',
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodyFontSize(context) - 4,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primary,
+                          fontFamily: 'Nunito',
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-            )
-          else
-            SliverPadding(
-              padding: const EdgeInsets.all(AppDimensions.mediumPadding),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: AppDimensions.mediumPadding,
-                  mainAxisSpacing: AppDimensions.mediumPadding,
-                  childAspectRatio: 0.8,
+            ),
+
+            // Quizzes Grid untuk kategori yang dipilih
+            if (categoryQuizzes.isEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(AppDimensions.getLargePadding(context)),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.quiz_outlined,
+                        size: 80,
+                        color: Colors.grey.withOpacity(0.5),
+                      ),
+                      SizedBox(height: AppDimensions.getMediumPadding(context)),
+                      Text(
+                        'No quizzes available in $_selectedCategory',
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodyFontSize(context),
+                          color: Colors.grey,
+                          fontFamily: 'Nunito',
+                        ),
+                      ),
+                      SizedBox(height: AppDimensions.getSmallPadding(context)),
+                      Text(
+                        'Check back later for new quizzes!',
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodyFontSize(context) - 2,
+                          color: Colors.grey.withOpacity(0.7),
+                          fontFamily: 'Nunito',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: AppDimensions.getMediumPadding(context)),
+                      ElevatedButton(
+                        onPressed: _resetSelection,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                        ),
+                        child: const Text('Back to Categories'),
+                      ),
+                    ],
+                  ),
                 ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final quiz = categoryQuizzes[index];
-                    return QuizCard(
-                      quiz: quiz,
-                      onTap: () {
-                        quizModel.setCurrentQuiz(quiz);
-                        Navigator.pushNamed(context, '/quiz_detail');
-                      },
-                    );
-                  },
-                  childCount: categoryQuizzes.length,
+              )
+            else
+              SliverPadding(
+                padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: AppDimensions.getGridCrossAxisCount(context),
+                    crossAxisSpacing: AppDimensions.getMediumPadding(context),
+                    mainAxisSpacing: AppDimensions.getMediumPadding(context),
+                    childAspectRatio: 0.8,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final quiz = categoryQuizzes[index];
+                      return QuizCard(
+                        quiz: quiz,
+                        onTap: () {
+                          quizModel.setCurrentQuiz(quiz);
+                          Navigator.pushNamed(context, '/quiz_detail');
+                        },
+                      );
+                    },
+                    childCount: categoryQuizzes.length,
+                  ),
                 ),
               ),
-            ),
+          ],
         ],
       ),
     );

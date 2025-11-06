@@ -14,7 +14,7 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double getCardRadius() {
-      return 16.0; 
+      return 16.0;
     }
 
     EdgeInsets getMediumPadding() {
@@ -62,7 +62,7 @@ class CategoryCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    category['name'] ?? 'Category', // Default name jika null
+                    category['name'] ?? 'Category',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
