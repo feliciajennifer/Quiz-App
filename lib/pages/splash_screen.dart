@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../models/user_model.dart';
+
 import '../utils/constants.dart';
-import 'home_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -35,14 +33,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void _navigateToHome() async {
     await Future.delayed(const Duration(seconds: 3));
     
-    final userModel = Provider.of<UserModel>(context, listen: false);
-    
     if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomePage(),
-        ),
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        '/home',
+        (route) => false,
       );
     }
   }

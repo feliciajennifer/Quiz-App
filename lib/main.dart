@@ -36,9 +36,8 @@ class MyApp extends StatelessWidget {
           darkTheme: themeModel.darkTheme,
           themeMode: themeModel.themeMode,
           debugShowCheckedModeBanner: false,
-          initialRoute: '/splash',
+          home: const SplashScreen(),
           routes: {
-            '/splash': (context) => const SplashScreen(),
             '/home': (context) => const HomePage(),
             '/quizzes': (context) => const QuizzesPage(),
             '/quiz_detail': (context) => const QuizDetailPage(),
