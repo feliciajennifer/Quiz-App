@@ -22,7 +22,7 @@ class AnswerCard extends StatelessWidget {
     Color getBorderColor() {
       if (showCorrect) {
         if (isCorrect) return AppColors.success;
-        if (isSelected && !isCorrect) return AppColors.error;
+        if (isSelected && !isCorrect) return AppColors.error; 
       }
       return isSelected
           ? AppColors.primary
@@ -31,38 +31,18 @@ class AnswerCard extends StatelessWidget {
 
     Color getBackgroundColor() {
       if (showCorrect) {
-        if (isCorrect) return AppColors.success.withOpacity(0.1);
-        if (isSelected && !isCorrect) return AppColors.error.withOpacity(0.1);
+        if (isCorrect) return AppColors.success.withOpacity(0.1); 
+        if (isSelected && !isCorrect) return AppColors.error.withOpacity(0.1); 
       }
       return isSelected
           ? AppColors.primary.withOpacity(0.1)
           : Theme.of(context).cardColor;
     }
 
-    IconData? getIcon() {
-      if (showCorrect) {
-        if (isCorrect) return Icons.check_circle;
-        if (isSelected && !isCorrect) return Icons.cancel;
-      }
-      return isSelected ? Icons.radio_button_checked : null;
-    }
-
-    Color getIconColor() {
-      if (showCorrect) {
-        if (isCorrect) return AppColors.success;
-        if (isSelected && !isCorrect) return AppColors.error;
-      }
-      return AppColors.primary;
-    }
-
-    double getCardRadius() {
-      return 12.0; 
-    }
-
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(getCardRadius()),
+        borderRadius: BorderRadius.circular(12),
         side: BorderSide(
           color: getBorderColor(),
           width: 2,
@@ -70,12 +50,12 @@ class AnswerCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(getCardRadius()),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
-          padding: const EdgeInsets.all(16), 
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: getBackgroundColor(),
-            borderRadius: BorderRadius.circular(getCardRadius()),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
             children: [
@@ -90,12 +70,6 @@ class AnswerCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (getIcon() != null)
-                Icon(
-                  getIcon(),
-                  color: getIconColor(),
-                  size: 20,
-                ),
             ],
           ),
         ),

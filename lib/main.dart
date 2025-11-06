@@ -7,8 +7,8 @@ import 'pages/splash_screen.dart';
 import 'pages/welcome_page.dart';
 import 'pages/main_navigation.dart';
 import 'pages/quiz_detail_page.dart';
-import 'pages/quiz_play_page.dart';
 import 'pages/result_page.dart';
+import 'pages/quiz_play_page.dart';
 
 void main() {
   runApp(
