@@ -48,71 +48,15 @@ class _MainNavigationState extends State<MainNavigation> {
           unselectedLabelStyle: const TextStyle(
             fontFamily: 'Nunito',
           ),
-          items: [
+          items: const [
             BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/images/home.png',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 0 ? Colors.green : Colors.grey,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  // Fallback jika image tidak ditemukan
-                  return Icon(
-                    Icons.home_rounded,
-                    color: _currentIndex == 0 ? Colors.green : Colors.grey,
-                    size: 24,
-                  );
-                },
-              ),
-              activeIcon: Image.asset(
-                'assets/images/home.png',
-                width: 24,
-                height: 24,
-                color: Colors.green,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  // Fallback jika image tidak ditemukan
-                  return Icon(
-                    Icons.home_rounded,
-                    color: Colors.green,
-                    size: 24,
-                  );
-                },
-              ),
+              icon: Icon(Icons.home_rounded),
+              activeIcon: Icon(Icons.home_rounded),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Image.asset(
-                'assets/images/quiz.png',
-                width: 24,
-                height: 24,
-                color: _currentIndex == 1 ? Colors.green : Colors.grey,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  // Fallback jika image tidak ditemukan
-                  return Icon(
-                    Icons.quiz_rounded,
-                    color: _currentIndex == 1 ? Colors.green : Colors.grey,
-                    size: 24,
-                  );
-                },
-              ),
-              activeIcon: Image.asset(
-                'assets/images/quiz.png',
-                width: 24,
-                height: 24,
-                color: Colors.green,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  // Fallback jika image tidak ditemukan
-                  return Icon(
-                    Icons.quiz_rounded,
-                    color: Colors.green,
-                    size: 24,
-                  );
-                },
-              ),
+              icon: Icon(Icons.quiz_rounded),
+              activeIcon: Icon(Icons.quiz_rounded),
               label: 'Quizzes',
             ),
           ],

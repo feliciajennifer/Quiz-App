@@ -42,7 +42,7 @@ class _WelcomePageState extends State<WelcomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Logo dan Welcome Message
+                // Logo Thinkzone
                 Container(
                   width: 100,
                   height: 100,
@@ -128,18 +128,9 @@ class _WelcomePageState extends State<WelcomePage> {
                             decoration: InputDecoration(
                               labelText: 'Enter your name',
                               hintText: 'Your awesome name...',
-                              prefixIcon: Image.asset(
-                                'assets/images/user-profile.png',
-                                width: 10,
-                                height: 10,
-                                fit: BoxFit.contain,
-                                errorBuilder: (context, error, stackTrace) {
-                                  // Fallback jika image tidak ditemukan
-                                  return Icon(
-                                    Icons.person_outline,
-                                    color: Colors.grey[600],
-                                  );
-                                },
+                              prefixIcon: Icon(
+                                Icons.person_outline,
+                                color: Colors.grey[600],
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
@@ -191,7 +182,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
                 SizedBox(height: AppDimensions.getMediumPadding(context)),
 
-                // Fun Facts
+                // Fun Facts (MENGGANTI IMAGE IDEA DENGAN ICON)
                 Container(
                   padding: EdgeInsets.all(AppDimensions.getMediumPadding(context)),
                   decoration: BoxDecoration(
@@ -200,20 +191,10 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                   child: Row(
                     children: [
-                      Image.asset(
-                        'assets/images/idea.png',
-                        width: 20,
-                        height: 20,
+                      Icon( 
+                        Icons.emoji_events,
                         color: Colors.white.withOpacity(0.8),
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          // Fallback jika image tidak ditemukan
-                          return Icon(
-                            Icons.emoji_events,
-                            color: Colors.white.withOpacity(0.8),
-                            size: 20,
-                          );
-                        },
+                        size: 20,
                       ),
                       SizedBox(width: AppDimensions.getSmallPadding(context)),
                       Expanded(
