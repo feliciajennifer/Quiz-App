@@ -1,25 +1,43 @@
-<<<<<<< HEAD
-# quiz_application
+# Quiz Application
 
-A new Flutter project.
+Aplikasi Quiz Pilihan Ganda berbasis Flutter.
 
-Nama : Felicia Jennifer Febiola Simarmata
-NIM : 231401046
-Lab : Pemrograman Mobile 1
+---
 
-## Getting Started
+## Identitas
 
-This project is a starting point for a Flutter application.
+**Nama:** Felicia Jennifer Febiola Simarmata  
+**NIM:** 231401046  
+**Lab:** Pemrograman Mobile 1
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Nama Aplikasi
+**Thinkzone**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# Quiz-App
-Aplikasi quiz pilihan ganda dengan flutter
->>>>>>> 5a5e78cb0f561b19e7870862aa015be181fabb5e
+---
+
+## Deskripsi Aplikasi
+Aplikasi **Thinkzone** adalah aplikasi berbasis Flutter yang dirancang untuk membantu pengguna mengasah pengetahuan mereka melalui berbagai kuis pilihan ganda.  
+Pengguna dapat menjawab pertanyaan yang tersedia, melihat skor akhir, serta menguji kemampuan mereka dalam berbagai kategori.  
+
+Aplikasi ini dikembangkan menggunakan **Flutter** dan **Provider State Management**, dengan antarmuka yang interaktif serta navigasi yang mudah digunakan.
+
+---
+
+## Credit
+Aset-aset yang digunakan dalam aplikasi ini berasal dari sumber-sumber berikut:
+- Ikon & ilustrasi: [Flaticon](https://www.flaticon.com/) dan [Freepik](https://www.freepik.com/)
+- Font: [Google Fonts](https://fonts.google.com/)
+
+---
+
+### Video Demo
+[🎬 Lihat Video Demo Aplikasi](https://drive.google.com/drive/folders/1KjbqHFxrg2i3VubBAk6ukAFwNIeRMRvN))
+
+---
+
+## Mockup / Prototype
+[🔗 Lihat Mockup/Prototype di Figma](https://www.figma.com/design/biGNo6bAQGoqg3j1wHo8EM/Felicia---app-quiz?node-id=0-1&m=dev&t=qPg0ywIVpkPBvi3z-1)
+
+---
