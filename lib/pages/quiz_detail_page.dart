@@ -70,10 +70,22 @@ class QuizDetailPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Icon(
-                      Icons.quiz,
-                      size: 32,
-                      color: AppColors.primary,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        'assets/images/Thinkzone.png',
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          // Fallback jika image tidak ditemukan
+                          return Icon(
+                            Icons.quiz,
+                            size: 32,
+                            color: AppColors.primary,
+                          );
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -116,7 +128,7 @@ class QuizDetailPage extends StatelessWidget {
                 Expanded(
                   child: _buildInfoCard(
                     context,
-                    Icons.question_answer_outlined,
+                    'assets/images/question.png', // question.png
                     'Questions',
                     '${quiz['questionCount']}',
                   ),
@@ -125,7 +137,7 @@ class QuizDetailPage extends StatelessWidget {
                 Expanded(
                   child: _buildInfoCard(
                     context,
-                    Icons.school_outlined,
+                    'assets/images/info.png', // info.png
                     'Level',
                     quiz['difficulty'],
                   ),
@@ -204,7 +216,7 @@ class QuizDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard(BuildContext context, IconData icon, String title, String value) {
+  Widget _buildInfoCard(BuildContext context, String imagePath, String title, String value) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -224,10 +236,26 @@ class QuizDetailPage extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(
-            icon,
-            size: 20,
+          Image.asset(
+            imagePath,
+            width: 24,
+            height: 24,
             color: AppColors.primary,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              // Fallback jika image tidak ditemukan
+              IconData fallbackIcon;
+              if (imagePath.contains('question.png')) {
+                fallbackIcon = Icons.question_answer_outlined;
+              } else {
+                fallbackIcon = Icons.school_outlined;
+              }
+              return Icon(
+                fallbackIcon,
+                size: 24,
+                color: AppColors.primary,
+              );
+            },
           ),
           const SizedBox(height: 8),
           Text(

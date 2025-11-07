@@ -46,6 +46,7 @@ class QuizCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Image Section - GUNAKAN IMAGE DARI DATA QUIZ
             Container(
               height: imageHeight,
               width: double.infinity,
@@ -54,48 +55,68 @@ class QuizCard extends StatelessWidget {
                   topLeft: Radius.circular(_getCardRadius(screenWidth, isLandscape)),
                   topRight: Radius.circular(_getCardRadius(screenWidth, isLandscape)),
                 ),
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.primary.withOpacity(0.8),
-                    AppColors.secondary.withOpacity(0.6),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
               ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    right: 8,
-                    top: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        quiz['difficulty']?.toString().toUpperCase() ?? 'EASY',
-                        style: TextStyle(
-                          fontSize: fontSizeSmall - 2,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                          fontFamily: 'Nunito',
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(_getCardRadius(screenWidth, isLandscape)),
+                  topRight: Radius.circular(_getCardRadius(screenWidth, isLandscape)),
+                ),
+                child: Stack(
+                  children: [
+                    // Background Image
+                    Image.asset(
+                      quiz['image'] ?? 'assets/images/Thinkzone.png', // Fallback ke Thinkzone.png
+                      width: double.infinity,
+                      height: imageHeight,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Fallback jika image tidak ditemukan - gunakan gradient
+                        return Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.primary.withOpacity(0.8),
+                                AppColors.secondary.withOpacity(0.6),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.quiz,
+                            size: iconSize,
+                            color: Colors.white.withOpacity(0.9),
+                          ),
+                        );
+                      },
+                    ),
+                    
+                    // Difficulty Badge
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          quiz['difficulty']?.toString().toUpperCase() ?? 'EASY',
+                          style: TextStyle(
+                            fontSize: fontSizeSmall - 2,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                            fontFamily: 'Nunito',
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: Icon(
-                      Icons.quiz,
-                      size: iconSize,
-                      color: Colors.white.withOpacity(0.9),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             

@@ -140,7 +140,6 @@ class ResultPage extends StatelessWidget {
                       'Correct',
                       score.toString(),
                       AppColors.success,
-                      Icons.check_circle,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -151,7 +150,6 @@ class ResultPage extends StatelessWidget {
                       'Missed',
                       missed.toString(),
                       AppColors.error,
-                      Icons.cancel,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -162,7 +160,6 @@ class ResultPage extends StatelessWidget {
                       'Accuracy',
                       '$accuracy%',
                       AppColors.primary,
-                      Icons.analytics,
                     ),
                   ),
                 ],
@@ -183,10 +180,27 @@ class ResultPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Icon(
-                      _getPerformanceIcon(accuracy),
-                      size: 40,
-                      color: _getPerformanceColor(accuracy),
+                    Image.asset(
+                      'assets/images/message.png',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Fallback jika image tidak ditemukan
+                        return Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: _getPerformanceColor(accuracy).withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Icon(
+                            Icons.emoji_events,
+                            size: 30,
+                            color: _getPerformanceColor(accuracy),
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -275,7 +289,7 @@ class ResultPage extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(BuildContext context, String title, String value, Color color, IconData icon) {
+  Widget _buildStatCard(BuildContext context, String title, String value, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -287,22 +301,16 @@ class ResultPage extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(
-            icon,
-            color: color,
-            size: 24,
-          ),
-          const SizedBox(height: 8),
           Text(
             value,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 20, 
               fontWeight: FontWeight.bold,
               color: color,
               fontFamily: 'Nunito',
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Text(
             title,
             style: const TextStyle(
@@ -320,12 +328,6 @@ class ResultPage extends StatelessWidget {
     if (accuracy >= 80) return AppColors.success;
     if (accuracy >= 60) return const Color(0xFFFF9800);
     return AppColors.error;
-  }
-
-  IconData _getPerformanceIcon(int accuracy) {
-    if (accuracy >= 80) return Icons.emoji_events;
-    if (accuracy >= 60) return Icons.thumb_up;
-    return Icons.lightbulb_outline;
   }
 
   String _getPerformanceMessage(int accuracy) {

@@ -57,10 +57,22 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.lightbulb_outline,
-                    size: 50,
-                    color: AppColors.primary,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      'assets/images/Thinkzone.png', 
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Fallback jika image tidak ditemukan
+                        return Icon(
+                          Icons.lightbulb_outline,
+                          size: 50,
+                          color: AppColors.primary,
+                        );
+                      },
+                    ),
                   ),
                 ),
                 SizedBox(height: AppDimensions.getLargePadding(context)),
@@ -116,7 +128,19 @@ class _WelcomePageState extends State<WelcomePage> {
                             decoration: InputDecoration(
                               labelText: 'Enter your name',
                               hintText: 'Your awesome name...',
-                              prefixIcon: const Icon(Icons.person_outline),
+                              prefixIcon: Image.asset(
+                                'assets/images/user-profile.png',
+                                width: 10,
+                                height: 10,
+                                fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) {
+                                  // Fallback jika image tidak ditemukan
+                                  return Icon(
+                                    Icons.person_outline,
+                                    color: Colors.grey[600],
+                                  );
+                                },
+                              ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(AppDimensions.getButtonRadius(context)),
                               ),
@@ -176,10 +200,20 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.emoji_events,
+                      Image.asset(
+                        'assets/images/idea.png',
+                        width: 20,
+                        height: 20,
                         color: Colors.white.withOpacity(0.8),
-                        size: 20,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          // Fallback jika image tidak ditemukan
+                          return Icon(
+                            Icons.emoji_events,
+                            color: Colors.white.withOpacity(0.8),
+                            size: 20,
+                          );
+                        },
                       ),
                       SizedBox(width: AppDimensions.getSmallPadding(context)),
                       Expanded(

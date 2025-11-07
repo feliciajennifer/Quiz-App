@@ -71,10 +71,22 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     ),
                   ],
                 ),
-                child: const Icon(
-                  Icons.lightbulb_outline,
-                  size: 60,
-                  color: AppColors.primary,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    'assets/images/Thinkzone.png',
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Fallback jika image tidak ditemukan
+                      return Icon(
+                        Icons.lightbulb_outline,
+                        size: 60,
+                        color: AppColors.primary,
+                      );
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: 24),

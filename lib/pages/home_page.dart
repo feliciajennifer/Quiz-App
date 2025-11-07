@@ -26,9 +26,18 @@ class HomePage extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(
-              themeModel.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-              color: Theme.of(context).textTheme.bodyLarge?.color,
+            icon: Image.asset(
+              themeModel.isDarkMode ? 'assets/images/darkmode.png' : 'assets/images/lightmode.png',
+              width: 24,
+              height: 24,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                // Fallback jika image tidak ditemukan
+                return Icon(
+                  themeModel.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                );
+              },
             ),
             onPressed: () {
               themeModel.toggleTheme();
@@ -78,10 +87,22 @@ class HomePage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          Icons.lightbulb_outline,
-                          color: AppColors.primary,
-                          size: 24,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: Image.asset(
+                            'assets/images/Thinkzone.png',
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              // Fallback jika image tidak ditemukan
+                              return Icon(
+                                Icons.lightbulb_outline,
+                                color: AppColors.primary,
+                                size: 24,
+                              );
+                            },
+                          ),
                         ),
                       ),
                       SizedBox(width: AppDimensions.getMediumPadding(context)),
@@ -125,10 +146,19 @@ class HomePage extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          Icons.rocket_launch,
-                          color: Colors.white,
-                          size: 16,
+                        Image.asset(
+                          'assets/images/learn.png',
+                          width: 16,
+                          height: 16,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            // Fallback jika image tidak ditemukan
+                            return Icon(
+                              Icons.rocket_launch,
+                              color: Colors.white,
+                              size: 16,
+                            );
+                          },
                         ),
                         const SizedBox(width: 6),
                         Text(
@@ -172,14 +202,34 @@ class HomePage extends StatelessWidget {
                       color: AppColors.primary.withOpacity(0.3),
                     ),
                   ),
-                  child: Text(
-                    '${popularQuizzes.length} quizzes',
-                    style: TextStyle(
-                      fontSize: AppDimensions.getBodyFontSize(context) - 4,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
-                      fontFamily: 'Nunito',
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/images/question.png',
+                        width: 14,
+                        height: 14,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          // Fallback jika image tidak ditemukan
+                          return Icon(
+                            Icons.question_answer,
+                            size: 14,
+                            color: AppColors.primary,
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${popularQuizzes.length} quizzes',
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodyFontSize(context) - 4,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primary,
+                          fontFamily: 'Nunito',
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
